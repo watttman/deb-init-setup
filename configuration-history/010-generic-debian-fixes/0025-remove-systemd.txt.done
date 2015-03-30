@@ -1,0 +1,17 @@
+# http://without-systemd.org/wiki/index.php/How_to_remove_systemd_from_a_Debian_jessie/sid_installation
+
+# First install the SysV init packages
+# apt-get install sysvinit-core sysvinit sysvinit-utils
+
+# Then reboot your machine and remove all of the systemd packages. BE AWARE that the following command removes packages that depend on systemd itself or 
+# things like libpam-systemd!
+# apt-get remove --purge --auto-remove systemd
+
+# Prevent apt from installing systemd packages in the future.
+# echo -e 'Package: systemd\nPin: origin ""\nPin-Priority: -1' > /etc/apt/preferences.d/systemd
+
+# put --noclear for tty1 in /etc/inittab
+# 1:2345:respawn:/sbin/getty --noclear 38400 tty1
+
+# reboot and assure all works, including the network!
+

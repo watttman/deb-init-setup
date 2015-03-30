@@ -1,0 +1,3 @@
+# configure tty console font
+dpkg-reconfigure console-setup
+

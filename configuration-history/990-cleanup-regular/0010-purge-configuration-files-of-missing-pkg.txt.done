@@ -1,0 +1,3 @@
+# This will purge configuration files for packages which are not installed anymore ('rc' status in dpkg -l)
+
+# dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs dpkg --purge

@@ -1,0 +1,20 @@
+# To allow sending external mail, dpkg-reconfigure exim4-config (as internet server @ 1st option, next carefully not to accept anything from outside)
+# see more https://www.debian.org/releases/stable/i386/ch08s05.html.en
+
+# Verify exim MTA is listening ONLY locally, on 127.0.0.1:25
+# netstat -anp | grep tcp
+
+# test sending email to remote host:
+# echo "test msg" | mail -s "Test message" vnaskov@teksavvy.com
+# then cat /var/log/exim4/mainlog to verify it went
+# check at recepient too
+
+# forward root to external account
+# edit /etc/aliases:
+# root: debuser, vnaskov@teksavvy.com
+# and then newaliases
+# echo "test msg 2" | mail -s "Test message 2" root
+# then cat /var/log/exim4/mainlog to verify it went
+# check at recepient too
+
+

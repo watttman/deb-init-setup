@@ -1,0 +1,23 @@
+# PHP support for apache2
+# Note that the one below will eventually replace apache2 mpm_event module with mpm_prefork module
+# will also install as dependency php5-cli php5-common php5-json
+apt-get update && apt-get install libapache2-mod-php5
+
+# PHP databases & PDO support (MySQL,PostreSQL, SQLite, Sybase/MSSQL)
+apt-get update && apt-get install php5-mysql php5-pgsql php5-sqlite php5-sybase
+
+# PHP graphics (for captchas) and crypto modules (for better password crypting etc); also for frameworks as Yii
+apt-get update && apt-get install php5-gd php5-mcrypt
+
+# PHP APCu (Alternative PHP Cache) and pear (extension application repository) modules; for speed and frameworks as Yii
+apt-get update && apt-get install php5-apcu php-pear
+
+# PHP command-line interface for scripts etc; could already be installed by the above but even in this case,
+#  will be set to 'manually installed' and will not be removed in case we decide to remove pear or apcu
+apt-get update && apt-get install php5-cli
+
+# just in case, install virtual package php5 - it is needed
+apt-get update && apt-get install php5
+
+# for full yii support - install all of the above!
+

@@ -1,0 +1,290 @@
+#BEGIN CONFIG INFO
+#DESCR: 4GB RAM, InnoDB only, ACID, few connections, heavy queries
+#TYPE: SYSTEM
+#END CONFIG INFO
+
+#
+# This is a MySQL example config file for systems with 4GB of memory
+# running mostly MySQL using InnoDB only tables and performing complex
+# queries with few connections.
+# 
+# MySQL programs look for option files in a set of
+# locations which depend on the deployment platform.
+# You can copy this option file to one of those
+# locations. For information about these locations, see:
+# http://dev.mysql.com/doc/mysql/en/option-files.html
+#
+# In this file, you can use all long options that a program supports.
+# If you want to know which options a program supports, run the program
+# with the "--help" option.
+#
+# More detailed information about the individual options can also be
+# found in the manual.
+#
+
+
+# *** Application-specific options follow here ***
+
+#
+# The MySQL server
+#
+[mysqld]
+
+# generic configuration options
+port		= 3306
+socket		= /var/run/mysqld/mysqld.sock
+
+
+default-storage-engine  = InnoDB
+
+character_set_server    = utf8
+
+#otherwise incompat between linux and windows may occur!
+lower_case_table_names=1
+
+
+
+
+# back_log is the number of connections the operating system can keep in
+# the listen queue, before the MySQL connection manager thread has
+# processed them. If you have a very high connection rate and experience
+# "connection refused" errors, you might need to increase this value.
+# Check your OS documentation for the maximum value of this parameter.
+# Attempting to set back_log higher than your operating system limit
+# will have no effect.
+back_log = 50
+
+# Don't listen on a TCP/IP port at all. This can be a security
+# enhancement, if all processes that need to connect to mysqld run
+# on the same host.  All interaction with mysqld must be made via Unix
+# sockets or named pipes.
+# Note that using this option without enabling named pipes on Windows
+# (via the "enable-named-pipe" option) will render mysqld useless!
+#skip-networking
+
+# The maximum amount of concurrent sessions the MySQL server will
+# allow. One of these connections will be reserved for a user with
+# SUPER privileges to allow the administrator to login even if the
+# connection limit has been reached.
+max_connections = 100
+
+# Maximum amount of errors allowed per host. If this limit is reached,
+# the host will be blocked from connecting to the MySQL server until
+# "FLUSH HOSTS" has been run or the server was restarted. Invalid
+# passwords and other errors during the connect phase result in
+# increasing this value. See the "Aborted_connects" status variable for
+# global counter.
+max_connect_errors = 10
+
+# The number of open tables for all threads. Increasing this value
+# increases the number of file descriptors that mysqld requires.
+# Therefore you have to make sure to set the amount of open files
+# allowed to at least 4096 in the variable "open-files-limit" in
+# section [mysqld_safe]
+table_open_cache = 2048
+
+# Enable external file level locking. Enabled file locking will have a
+# negative impact on performance, so only use it in case you have
+# multiple database instances running on the same files (note some
+# restrictions still apply!) or if you use other software relying on
+# locking MyISAM tables on file level.
+#external-locking
+
+# The maximum size of a query packet the server can handle as well as
+# maximum query size server can process (Important when working with
+# large BLOBs).  enlarged dynamically, for each connection.
+max_allowed_packet = 16M
+
+# The size of the cache to hold the SQL statements for the binary log
+# during a transaction. If you often use big, multi-statement
+# transactions you can increase this value to get more performance. All
+# statements from transactions are buffered in the binary log cache and
+# are being written to the binary log at once after the COMMIT.  If the
+# transaction is larger than this value, temporary file on disk is used
+# instead.  This buffer is allocated per connection on first update
+# statement in transaction
+binlog_cache_size = 1M
+
+# Maximum allowed size for a single HEAP (in memory) table. This option
+# is a protection against the accidential creation of a very large HEAP
+# table which could otherwise use up all memory resources.
+max_heap_table_size = 64M
+
+# Size of the buffer used for doing full table scans.
+# Allocated per thread, if a full scan is needed.
+read_buffer_size = 2M
+
+# When reading rows in sorted order after a sort, the rows are read
+# through this buffer to avoid disk seeks. You can improve ORDER BY
+# performance a lot, if set this to a high value.
+# Allocated per thread, when needed.
+read_rnd_buffer_size = 16M
+
+# Sort buffer is used to perform sorts for some ORDER BY and GROUP BY
+# queries. If sorted data does not fit into the sort buffer, a disk
+# based merge sort is used instead - See the "Sort_merge_passes"
+# status variable. Allocated per thread if sort is needed.
+sort_buffer_size = 8M
+
+# This buffer is used for the optimization of full JOINs (JOINs without
+# indexes). Such JOINs are very bad for performance in most cases
+# anyway, but setting this variable to a large value reduces the
+# performance impact. See the "Select_full_join" status variable for a
+# count of full JOINs. Allocated per thread if full join is found
+join_buffer_size = 8M
+
+# How many threads we should keep in a cache for reuse. When a client
+# disconnects, the client's threads are put in the cache if there aren't
+# more than thread_cache_size threads from before.  This greatly reduces
+# the amount of thread creations needed if you have a lot of new
+# connections. (Normally this doesn't give a notable performance
+# improvement if you have a good thread implementation.)
+thread_cache_size = 8
+
+# This permits the application to give the threads system a hint for the
+# desired number of threads that should be run at the same time.  This
+# value only makes sense on systems that support the thread_concurrency()
+# function call (Sun Solaris, for example).
+# You should try [number of CPUs]*(2..4) for thread_concurrency
+thread_concurrency = 8
+
+# Query cache is used to cache SELECT results and later return them
+# without actual executing the same query once again. Having the query
+# cache enabled may result in significant speed improvements, if your
+# have a lot of identical queries and rarely changing tables. See the
+# "Qcache_lowmem_prunes" status variable to check if the current value
+# is high enough for your load.
+# Note: In case your tables change very often or if your queries are
+# textually different every time, the query cache may result in a
+# slowdown instead of a performance improvement.
+query_cache_size = 64M
+
+# Only cache result sets that are smaller than this limit. This is to
+# protect the query cache of a very large result set overwriting all
+# other query results.
+query_cache_limit = 2M
+
+# Minimum word length to be indexed by the full text search index.
+# You might wish to decrease it if you need to search for shorter words.
+# Note that you need to rebuild your FULLTEXT index, after you have
+# modified this value.
+ft_min_word_len = 4
+
+# If your system supports the memlock() function call, you might want to
+# enable this option while running MySQL to keep it locked in memory and
+# to avoid potential swapping out in case of high memory pressure. Good
+# for performance.
+#memlock
+
+# Table type which is used by default when creating new tables, if not
+# specified differently during the CREATE TABLE statement.
+default-storage-engine = InnoDB
+
+# Thread stack size to use. This amount of memory is always reserved at
+# connection time. MySQL itself usually needs no more than 64K of
+# memory, while if you use your own stack hungry UDF functions or your
+# OS requires more stack for some operations, you might need to set this
+# to a higher value.
+thread_stack = 192K
+
+# Set the default transaction isolation level. Levels available are:
+# READ-UNCOMMITTED, READ-COMMITTED, REPEATABLE-READ, SERIALIZABLE
+#transaction_isolation = REPEATABLE-READ
+
+# Maximum size for internal (in-memory) temporary tables. If a table
+# grows larger than this value, it is automatically converted to disk
+# based table This limitation is for a single table. There can be many
+# of them.
+tmp_table_size = 64M
+
+# Enable binary logging. This is required for acting as a MASTER in a
+# replication configuration. You also need the binary log if you need
+# the ability to do point in time recovery from your latest backup.
+log-bin=mysql-bin
+
+# binary logging format - mixed recommended
+binlog_format=row
+
+# If you're using replication with chained slaves (A->B->C), you need to
+# enable this option on server B. It enables logging of updates done by
+# the slave thread into the slave's binary log.
+#log_slave_updates
+
+# Enable the full query log. Every query (even ones with incorrect
+# syntax) that the server receives will be logged. This is useful for
+# debugging, it is usually disabled in production use.
+#log
+
+# Print warnings to the error log file.  If you have any problem with
+# MySQL you should enable logging of warnings and examine the error log
+# for possible explanations. 
+#log_warnings
+
+
+# ***  Replication related settings 
+
+
+# Unique server identification number between 1 and 2^32-1. This value
+# is required for both master and slave hosts. It defaults to 1 if
+# "master-host" is not set, but will MySQL will not function as a master
+# if it is omitted.
+server-id = 1
+
+# Replication Slave (comment out master section to use this)
+#
+# To configure this host as a replication slave, you can choose between
+# two methods :
+#
+# 1) Use the CHANGE MASTER TO command (fully described in our manual) -
+#    the syntax is:
+#
+#    CHANGE MASTER TO MASTER_HOST=<host>, MASTER_PORT=<port>,
+#    MASTER_USER=<user>, MASTER_PASSWORD=<password> ;
+#
+#    where you replace <host>, <user>, <password> by quoted strings and
+#    <port> by the master's port number (3306 by default).
+#
+#    Example:
+#
+#    CHANGE MASTER TO MASTER_HOST='125.564.12.1', MASTER_PORT=3306,
+#    MASTER_USER='joe', MASTER_PASSWORD='secret';
+#
+# OR
+#
+# 2) Set the variables below. However, in case you choose this method, then
+#    start replication for the first time (even unsuccessfully, for example
+#    if you mistyped the password in master-password and the slave fails to
+#    connect), the slave will create a master.info file, and any later
+#    changes in this file to the variable values below will be ignored and
+#    overridden by the content of the master.info file, unless you shutdown
+#    the slave server, delete master.info and restart the slaver server.
+#    For that reason, you may want to leave the lines below untouched
+#    (commented) and instead use CHANGE MASTER TO (see above)
+#
+# required unique id between 2 and 2^32 - 1
+# (and different from the master)
+# defaults to 2 if master-host is set
+# but will not function as a slave if omitted
+#server-id = 2
+#
+# The replication master for this slave - required
+#master-host = <hostname>
+#
+# The username the slave will use for authentication when connecting
+# to the master - required
+#master-user = <username>
+#
+# The password the slave will authenticate with when connecting to
+# the master - required
+#master-password = <password>
+#
+# The port the master is listening on.
+# optional - defaults to 3306
+#master-port = <port>
+
+# Make the slave read-only. Only users with the SUPER privilege and the
+# replication slave thread will be able to modify data on it. You can
+# use this to ensure that no applications will accidently modify data on
+# the slave instead of the master
+#read_only
+

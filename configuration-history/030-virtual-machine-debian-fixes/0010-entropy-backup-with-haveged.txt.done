@@ -1,0 +1,16 @@
+# see https://www.digitalocean.com/community/tutorials/how-to-setup-additional-entropy-for-cloud-servers-using-haveged
+
+# To check the entropy (should generally be > 1024; and refill fast enough):
+# cat /proc/sys/kernel/random/entropy_avail
+
+# VM usually lacks good entropy source, and crypt/cypher may be slow due to low entropy avail/slow refill
+# use haveged to remedy
+
+
+# apt-get install haveged
+
+# Once you have the package installed, you can simply edit the configuration file located in /etc/default/haveged, ensuring the following options are set (usually already the default options):
+# DAEMON_ARGS="-w 1024"
+
+# Finally, just make sure it's configured to start on boot:
+# update-rc.d haveged defaults

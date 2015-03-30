@@ -1,0 +1,69 @@
+#BEGIN CONFIG INFO
+#DESCR: 4GB RAM, InnoDB only, ACID, few connections, heavy queries
+#TYPE: SYSTEM
+#END CONFIG INFO
+
+#
+# This is a MySQL example config file for systems with 4GB of memory
+# running mostly MySQL using InnoDB only tables and performing complex
+# queries with few connections.
+# 
+# MySQL programs look for option files in a set of
+# locations which depend on the deployment platform.
+# You can copy this option file to one of those
+# locations. For information about these locations, see:
+# http://dev.mysql.com/doc/mysql/en/option-files.html
+#
+# In this file, you can use all long options that a program supports.
+# If you want to know which options a program supports, run the program
+# with the "--help" option.
+#
+# More detailed information about the individual options can also be
+# found in the manual.
+#
+
+# *** Application-specific options follow here ***
+
+#
+# The MySQL server
+#
+[mysqld]
+
+#*** MyISAM Specific options
+
+
+# Size of the Key Buffer, used to cache index blocks for MyISAM tables.
+# Do not set it larger than 30% of your available memory, as some memory
+# is also required by the OS to cache rows. Even if you're not using
+# MyISAM tables, you should still set it to 8-64M as it will also be
+# used for internal temporary disk tables.
+key_buffer_size = 32M
+
+# MyISAM uses special tree-like cache to make bulk inserts (that is,
+# INSERT ... SELECT, INSERT ... VALUES (...), (...), ..., and LOAD DATA
+# INFILE) faster. This variable limits the size of the cache tree in
+# bytes per thread. Setting it to 0 will disable this optimisation.  Do
+# not set it larger than "key_buffer_size" for optimal performance.
+# This buffer is allocated when a bulk insert is detected.
+bulk_insert_buffer_size = 64M
+
+# This buffer is allocated when MySQL needs to rebuild the index in
+# REPAIR, OPTIMIZE, ALTER table statements as well as in LOAD DATA INFILE
+# into an empty table. It is allocated per thread so be careful with
+# large settings.
+myisam_sort_buffer_size = 128M
+
+# The maximum size of the temporary file MySQL is allowed to use while
+# recreating the index (during REPAIR, ALTER TABLE or LOAD DATA INFILE.
+# If the file-size would be bigger than this, the index will be created
+# through the key cache (which is slower).
+myisam_max_sort_file_size = 10G
+
+# If a table has more than one index, MyISAM can use more than one
+# thread to repair them by sorting in parallel. This makes sense if you
+# have multiple CPUs and plenty of memory.
+myisam_repair_threads = 1
+
+# Automatically check and repair not properly closed MyISAM tables.
+myisam_recover
+

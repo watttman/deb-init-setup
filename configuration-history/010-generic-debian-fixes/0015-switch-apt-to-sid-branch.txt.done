@@ -1,0 +1,73 @@
+# disable/comment all testing entries /etc/apt/sources.list
+
+# copy testing entries to /etc/apt/sources.list.d/debian-sid.list
+
+# disable all deb-src & all updates in /etc/apt/sources.list.d/debian-sid.list; leave only:
+
+################
+# debian sid
+deb http://ftp.us.debian.org/debian/ sid main non-free contrib
+# deb-src http://ftp.us.debian.org/debian/ sid main non-free contrib
+
+################
+# debian testing
+deb http://ftp.us.debian.org/debian/ testing main non-free contrib
+# deb-src http://ftp.us.debian.org/debian/ testing main non-free contrib
+
+
+# i.e. we have testing and sid side by side
+
+# apt-get update && apt-get dist-upgrade -d 
+# if all is okay, apt-get dist-upgrade && reboot
+
+# then disable testing completely:
+
+################
+# debian sid
+deb http://ftp.us.debian.org/debian/ sid main non-free contrib
+# deb-src http://ftp.us.debian.org/debian/ sid main non-free contrib
+
+################
+# debian testing
+# deb http://ftp.us.debian.org/debian/ testing main non-free contrib
+# deb-src http://ftp.us.debian.org/debian/ testing main non-free contrib
+
+# apt-get update && apt-get dist-upgrade -d 
+# if all is okay, apt-get dist-upgrade && reboot
+
+# if all is okay:
+# apt-get autoremove && apt-get clean && apt-get autoclean
+# apt-get update && apt-get dist-upgrade -d && reboot
+
+# all should be OK now.
+
+
+
+
+
+#############################################
+# Install debarchive for downgrading if need ever be
+
+# nano -w /etc/apt/sources.list.d/debiarchive.list
+
+# debian archive, use for downgrading ONLY in specific curcumstances!!!
+# to prevent complain, use apt-get update in this manner: apt-get -o Acquire::Check-Valid-Until=false update
+
+# change date as per the snapshot day needed
+# deb http://snapshot.debian.org/archive/debian/20150215T222335Z/ sid  main contrib non-free
+
+
+
+
+
+#############################################
+# install & confugure apt-listchanges
+apt-get install apt-listchanges
+
+# to check detail changelogs always, modify in /etc/apt/listchanges.conf
+frontend=pager
+email_address=
+confirm=1
+save_seen=/var/lib/apt/listchanges.db
+which=changelogs
+

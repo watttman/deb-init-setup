@@ -1,0 +1,17 @@
+# On very top of /etc/ntp.conf add:
+#tinker panic 0
+
+# Optionally add on top of the other servers
+#server us.pool.ntp.org iburst
+
+
+# Add these 2 lines to tell the local clock is stratum 10 (i.e. unreliable)?
+#server  127.127.1.0     # local clock
+#fudge   127.127.1.0 stratum 10
+
+# Then restart '/etc/init.d/ntp restart'
+# Check with 'ntpq -pn' or 'ntpq -p'
+
+
+# ps aux | grep ntp
+# should be running with -g flag

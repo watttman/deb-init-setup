@@ -1,0 +1,14 @@
+## After restarting mysql, check log to see warnings if it needs upgrade:
+# tail -n 100 /var/log/syslog
+
+## In this case:
+## 140210 16:48:47 [Warning] Using unique option prefix key_buffer instead of key_buffer_size is deprecated and will be removed in a future release. Please use the full name instead.
+## 140210 16:48:48 [Warning] Using unique option prefix myisam-recover instead of myisam-recover-options is deprecated and will be removed in a future release. Please use the full name instead.
+
+## Fix in config
+# nano -w /etc/mysql/my.cnf
+
+
+# Ignoring for now this error:
+# Feb  1 18:44:04 debianlamp-dev /etc/init.d/mysql[6267]: 150201 18:44:04 mysqld_safe Can't log to error log and syslog at the same time.  Remove all --log-error configuration options for --syslog to take effect.
+

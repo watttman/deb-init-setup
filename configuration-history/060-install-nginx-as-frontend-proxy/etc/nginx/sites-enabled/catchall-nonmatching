@@ -1,0 +1,11 @@
+server {
+        #### MAKE THIS A DEFAULT CATCH-ALL SERVER!
+        listen   80 default_server;
+        ####
+
+        location / {
+                deny all;
+        }
+
+}
+

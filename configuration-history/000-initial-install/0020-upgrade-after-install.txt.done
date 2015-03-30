@@ -1,0 +1,2 @@
+# Upgrade after install:
+# apt-get update; apt-get upgrade

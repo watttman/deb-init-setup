@@ -1,0 +1,80 @@
+###
+### Install Yii framework, and check accessibility and prerequisites
+###
+#
+# INSTALL FRAMEWORK
+#
+# switch to webuser's top framework directory
+#cd /var/www/debuser/frameworks
+#
+# wget latest version
+#wget https://github.com/yiisoft/yii/releases/download/1.1.14/yii-1.1.14.f0fee9.tar.gz
+#
+# untar
+#tar -xvzf yii-1.1.14.f0fee9.tar.gz
+#
+#
+# CHECK PREREQUISITES
+#
+# Go to a site's directory
+#cd ../host1-debian-box.local/webroot/
+#
+# Make a temporary symbolic link to framework
+#ln -s ../frameworks/yii-1.1.14.f0fee9
+#
+# Test in browser
+# http://host1-debian-box.local/yii-1.1.14.f0fee9/requirements/index.php
+#
+# Then you can remove the symbolic link if all is OK
+#rm yii-1.1.14.f0fee9
+
+
+###
+### Install test/demo web application
+###
+#
+# Remove demo index.asp or anything which exists under the host
+#rm -rf /var/www/debuser/host1-debian-box.local/webroot/*
+#
+# Install test/demo web app
+#/var/www/debuser/frameworks/yii-1.1.14.f0fee9/framework/yiic webapp /var/www/debuser/host1-debian-box.local/webroot
+
+
+###
+### Reallocate directories to proper physical places (apache vhost config MUST be able to follow symlinks for all this to work)
+###
+#
+# Cd to webroot
+# cd /var/www/debuser/host1-debian-box.local/webroot/
+#
+# Move protected folder to ../app/
+# mv protected ../app/
+#
+# Move 'runtime' and 'data' directories out of protected, then create symlinks to them
+#cd ../app/protected
+#mv runtime ../../tmp/
+#mv data ../../db/
+#
+# Make symbolic links to data and runtime here (does not hurt); so we don't have to change them explicitly in yii configs:
+#  only 'protected' is actually considered relocated out of webroot (so it is not accessibe by the server)
+#ln -s ../../db/data
+#ln -s ../../tmp/runtime
+#
+#
+# Now edit /var/www/debuser/host1-debian-box.local/webroot/index.php
+# $yii and $config should point to proper locations, as below
+#
+#// change the following paths if necessary
+#//$yii=dirname(__FILE__).'/../../frameworks/yii-1.1.14.f0fee9/framework/yii.php';
+#$yii=dirname(__FILE__).'/../frameworks/yii-1.1.14.f0fee9/framework/yii.php';
+#
+#//$config=dirname(__FILE__).'/protected/config/main.php';
+#$config=dirname(__FILE__).'/../app/protected/config/main.php';
+#
+# One last step: must allow yii webapp (www-data guid) to write inside webroot to publish assets
+# chmod -R g+w /var/www/debuser/host1-debian-box.local/webroot/assets
+#
+
+
+
+

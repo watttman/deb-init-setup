@@ -1,0 +1,11 @@
+# enable web port 8000 inserting before last entry in INPUT chain
+# iptables -I INPUT $(iptables -L INPUT --line-numbers | tail -n 1 | awk -F' ' '{print $1}') -p tcp --dport 8000 -j ACCEPT
+
+# proceed similarly if other ports need to be opened
+
+# iptables -vnL
+
+### if all OK, save the iptables config:
+# /etc/init.d/netfilter-persistent save
+
+

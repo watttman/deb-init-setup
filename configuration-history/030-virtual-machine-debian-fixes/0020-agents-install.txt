@@ -1,0 +1,6 @@
+# inside the client
+apt-get install qemu-guest-agent
+
+# assure the client has "hw" interface of the type "Channel" qemu-ga in order this to work!
+# useful for getting/setting guests' time, freezing filesystems etc
+# see 'virsh domtime [domain]'

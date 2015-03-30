@@ -1,0 +1,23 @@
+# check for hardware virtualization support
+egrep '(vmx|svm)' --color=always /proc/cpuinfo
+
+# Install kvm and virtinst
+apt-get update; apt-get install kvm qemu-kvm libvirt-bin virtinst bridge-utils qemu-utils ebtables dnsmasq
+
+# Afterwards we must add the user as which we're currently logged in (root) to the groups libvirt and kvm:
+# adduser `id -un` libvirt
+# adduser `id -un` kvm
+
+
+# To check if KVM has successfully been installed, run
+virsh -c qemu:///system list
+
+### It should display something like this:
+###
+### root@server1:~# virsh -c qemu:///system list
+###  Id Name                 State
+### ----------------------------------
+### 
+### root@server1:~#
+
+

@@ -1,0 +1,38 @@
+# Fix /root/.bashrc 
+###
+#
+# Enable  colorizing, safety and convenience aliases
+# Also add alias for dist-upgrade in /root/.bashrc
+# alias d-u='apt-get update && apt-get dist-upgrade -y -d && (echo "Updating apt-show-versions ..."; apt-show-versions -i; ) && ( [[ "`dpkg --get-selections | grep hold`X" != "X" ]] && echo -e "\nYou have holded packages!!!:\n\n----------------\n`dpkg --get-selections | grep hold`\n----------------"; ) '
+#
+# Also enable autocompletion for root: 
+# Either uncomment in /etc/bash.bashrc (this will enable it system-wide), or add to /root/.bashrc copying from non-root's /home/user/.bashrc
+#
+###
+
+
+
+
+
+# Fix resolution in console tty, add to /etc/default/grub:
+###
+#
+# GRUB_GFXMODE=1024x768
+# GRUB_GFXPAYLOAD_LINUX=1024x768
+#
+###
+# then run update-grub
+###
+
+
+
+# Add the following to /etc/motd:
+###
+#
+#-----------------------------------------------------------------------
+#
+#For configuration history of this host, see /root/configuration-history
+#
+#-----------------------------------------------------------------------
+#
+###

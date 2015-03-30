@@ -1,0 +1,12 @@
+# enable web port 80 for nginx, inserting before last entry in INPUT chain
+# iptables -I INPUT $(iptables -L INPUT --line-numbers | tail -n 1 | awk -F' ' '{print $1}') -p tcp --dport 80 -j ACCEPT
+
+# proceed similarly if other ports need to be opened
+# if needed, CLOSE apache's port 8000 for external connections! Both in iptables, and in apache2 ports.conf configuration file.
+
+# iptables -vnL
+
+### if all OK, save the iptables config:
+# /etc/init.d/netfilter-persistent save
+
+

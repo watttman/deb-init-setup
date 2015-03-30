@@ -1,0 +1,96 @@
+# in case of nosystemd system:
+apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor-theme polkit-kde-1 alsa-base alsa-utils kmix knemo khelpcenter4 kmenuedit kde-config-touchpad okular-extra-backends
+
+
+
+
+# Optional: remove vlc backend and replace it with gstreamer backend... (more economical, if we will not install vlc?)
+apt-get install phonon-backend-null
+apt-get install phonon-backend-gstreamer
+apt-get autoremove
+dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs dpkg --purge
+
+
+
+
+# install fonts
+apt-get install fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-droid fonts-freefont-ttf fonts-liberation fonts-lyx fonts-opensymbol fonts-sil-gentium-basic fonts-texgyre gsfonts mathematica-fonts tex-gyre ttf-mscorefonts-installer ttf-mscorefonts-installer xfonts-100dpi xfonts-100dpi-transcoded xfonts-75dpi xfonts-75dpi-transcoded xfonts-base xfonts-encodings xfonts-terminus xfonts-utils
+
+
+# install mesas
+apt-get install libegl1-mesa libgl1-mesa-dri libgl1-mesa-glx libglapi-mesa libgles1-mesa libgles2-mesa libglu1-mesa libwayland-egl1-mesa mesa-utils mesa-vdpau-drivers
+
+
+# fix cursor theme (systemsettings does not do it properly!!)
+update-alternatives --config x-cursor-theme
+
+
+# install utilities
+apt-get install kate qalculate-gtk okular ksnapshot 
+
+
+# install fs utilities
+apt-get install gparted ntfs-3g xfsprogs reiserfsprogs reiser4progs jfsutils dosfstools mtools attr sshfs fuse
+
+
+# install desktop network utilities
+apt-get install ktorrent pppoeconf
+
+
+# install remote and virtual machine utilities
+apt-get install krdc freerdp-X11 virt-manager ssh-askpass virtinst
+
+
+# install themes
+apt-get install adwaita-icon-theme clearlooks-phenix-theme dmz-cursor-theme gnome-icon-theme gtk3-engines-oxygen hicolor-icon-theme kdeartwork kdeartwork-theme-window oxygen-icon-theme oxygencursors plasma-desktopthemes-artwork tangerine-icon-theme tango-icon-theme
+
+# install qtcurve theme
+apt-get install gtk2-engines-qtcurve kde-style-qtcurve kwin-style-qtcurve qtcurve
+
+
+# install office
+apt-get install libreoffice
+
+
+# install graphics
+apt-get install gimp
+apt-get install dia dia-shapes gsfonts-x11 dia-rib-network
+
+# install development utils
+apt-get install exuberant-ctags
+
+
+# enhance kde config
+apt-get install kde-config-baloo-advanced kde-config-gtk-style
+
+
+
+# install multimedia stuff
+apt-get install vlc iceweasel browser-plugin-vlc 
+
+
+# install flash??
+apt-get install flashplugin-nonfree
+
+
+# for laptops - install finegrained powersaving/battery saving features
+# tune as appropriate (really depends on hardware)
+apt-get install powertop laptop-mode-tools
+
+
+# install mouse functionality for console
+apt-get install gpm
+
+
+
+
+#remove avahi crap
+apt-get purge avahi-autoipd
+
+
+
+
+
+
+
+

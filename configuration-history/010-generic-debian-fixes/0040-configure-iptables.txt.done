@@ -1,0 +1,43 @@
+## Flush all existing rules, if needed
+iptables -F
+iptables -X
+iptables -t nat -F
+iptables -t nat -X
+iptables -t mangle -F
+iptables -t mangle -X
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+
+## Add as a minimum the following iptables rules:
+iptables -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT 
+iptables -A INPUT -i lo -j ACCEPT 
+
+# The next rule will accept all new incoming ICMP echo requests, also known as pings. Only the first packet will count as NEW, the rest will be handled by the RELATED,ESTABLISHED rule. Since the computer is not a router, no other ICMP traffic with state NEW needs to be allowed.
+iptables -A INPUT -p icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
+
+
+#    If you want to accept all icmp traffic (which is usually not the case): use instead iptables -A INPUT -p icmp -j ACCEPT 
+#
+#    Next rule will drop all packets with invalid headers or checksums, invalid TCP flags, invalid ICMP messages (such as a port unreachable when we did not send anything to the host), and out of sequence packets which can be caused by sequence prediction or other similar attacks. The "DROP" target will drop a packet without any response, contrary to REJECT which politely refuses the packet. We use DROP because there is no proper "REJECT" response to packets that are INVALID, and we do not want to acknowledge that we received these packets.
+#    ICMPv6 Neighbor Discovery packets remain untracked, and will always be classified "INVALID" though they are not corrupted or the like. 
+#    Keep this in mind, and accept them before this rule! iptables -A INPUT -p 41 -j ACCEPT
+#
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
+
+# allow from local lan, eventually
+iptables -A INPUT -p tcp -m tcp -s 192.168.167.0/24 --dport 22 -j ACCEPT
+
+# protect port 22
+
+iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m tcp --dport 22 -m recent --update --seconds 30 --name SSHSTOP --rsource -j DROP 
+iptables -A INPUT -p tcp -m conntrack --ctstate NEW -m tcp --dport 22 -m recent --set --name SSHSTOP --rsource -j ACCEPT 
+iptables -A INPUT -j DROP 
+iptables -A FORWARD -j DROP
+
+## Add another rules if need be, see other configs
+
+## Save the iptables config:
+/etc/init.d/netfilter-persistent save
+
+

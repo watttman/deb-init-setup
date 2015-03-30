@@ -1,0 +1,27 @@
+# disabling apt recommends and suggests autoinstalling for packages
+# as described here https://wiki.debian.org/ReduceDebian#Reconfigure_apt_so_that_it_does_not_install_additional_packages
+
+# add file /etc/apt/apt.conf.d/80no-recommends-suggests
+# with the following content:
+
+###
+#// apt defaults for aptosid
+#// apt 0.7 introduces automatic behaviour unsuitable for sid, revert this
+#
+#// auto-remove breaks on meta packages
+#// APT::Get::AutomaticRemove "0";
+#// APT::Get::HideAutoRemove "1";
+#
+#// Recommends are as of now still abused in many packages
+#APT::Install-Recommends "0";
+#APT::Install-Suggests "0";
+#Debug::pkgAutoRemove "0";
+#
+#// PDiffs reduce the required download for apt-get update, but increase the
+#// CPU requirements and quite often fail.
+#// Acquire::PDiffs "0";
+###
+
+# the rest above are few hints
+
+# then run apt-get update

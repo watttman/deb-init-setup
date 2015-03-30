@@ -1,0 +1,30 @@
+# remove all pulseaudio crap!
+
+
+###### nepomuk/pim/akonadi etc semantic crap: switch from mysql to sqlite
+###### note most is done under the regular user!
+
+# apt-get install akonadi-backend-sqlite
+# apt-get remove --purge akonadi-backend-mysql
+
+$ rm -rf ~/.config/akonadi/agent*
+$ rm -rf ~/.local/share/akonadi
+$ rm -rf ~/.kde/share/config/akonadi-firstrunrc
+
+then configure the backend.
+
+$ nano -w /home/manul/.config/akonadi/akonadiserverrc
+
+[%General]
+Driver=QSQLITE3
+
+[QSQLITE3]
+Name=/home/manul/.local/share/akonadi/akonadi.db
+
+[Debug]
+Tracer=null
+
+# now start it
+$ akonadictl start
+
+# if okay, may reboot and confirm in systemsettings all looks like running

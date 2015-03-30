@@ -1,0 +1,68 @@
+### Move mysql databases to dedicated location
+
+
+
+### *** Stop existing instance
+/etc/init.d/mysql stop
+
+
+### *** Assure change of configuration
+# Copy my.cnf file in this directory to overwrite /etc/mysql/my.cnf - so configuration points to proper locations
+
+
+### *** Create new directories
+
+# mysql data directory (innodb and myisam databases)
+# replication binlogs directory
+# innodb logs directory
+mkdir -p /data/database-runtime/mysql/mysql-{data,binlogs,innodblogs}
+
+# fix permissions
+chown -R mysql:mysql /data/database-runtime/mysql
+chmod -R go-xrw /data/database-runtime/mysql
+
+
+### *** Fix the configuration file my.cnf, if need be
+
+# databases directories
+# datadir=/data/database-runtime/mysql/mysql-data/
+# innodb_data_home_dir=/data/database-runtime/mysql/mysql-data
+cp -a /var/lib/mysql/ibdata* /data/database-runtime/mysql/mysql-data/
+cp -Ra /var/lib/mysql/mysql /data/database-runtime/mysql/mysql-data/
+cp -Ra /var/lib/mysql/performance_schema /data/database-runtime/mysql/mysql-data/
+cp -a /var/lib/mysql/debian-*.flag /data/database-runtime/mysql/mysql-data/
+cp -a /var/lib/mysql/mysql_upgrade_info /data/database-runtime/mysql/mysql-data/
+
+# innodb logs directory
+# innodb_log_group_home_dir=/data/database-runtime/mysql/mysql-innodblogs
+cp -a /var/lib/mysql/ib_logfile* /data/database-runtime/mysql/mysql-innodblogs/
+
+# replication binlogs directory
+# log_bin = /data/database-runtime/mysql/mysql-binlogs
+cp -a /var/log/mysql/mysql-bin* /data/database-runtime/mysql/mysql-binlogs/
+
+
+
+### *** Disable prior directories & files
+
+mv /var/lib/mysql /var/lib/mysql.old
+rm -rf /var/log/mysql/mysql-bin*
+rm /var/log/mysql/error.log 
+
+### *** Restart to see if all is OK when relocated to new directories
+/etc/init.d/mysql restart
+
+### *** If all is OK after restart:
+# rm innodb and innolog files from old location
+rm -rf /var/lib/mysql.old/ib*
+rm -rf /var/lib/mysql.old/aria_log*
+# rm databases from old location
+rm -rf /var/lib/mysql.old/mysql
+rm -rf /var/lib/mysql.old/performance_schema
+
+# restart again
+# may need to do removals above one more time
+
+# restore old location directory name (just in case, 2 debian files there left, we leave these in both old and new data locations )
+mv /var/lib/mysql.old/ /var/lib/mysql
+

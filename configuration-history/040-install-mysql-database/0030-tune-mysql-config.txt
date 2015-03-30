@@ -1,0 +1,8 @@
+## Tune /etc/mysql/mysql.conf depending on the machine and database characteristics
+
+## This is a nontrivial stuff. 
+## As a starter:
+## Use *.cnf files in this directory - use my.cnf as a starter base with most important settings, 
+## and then read/use hints from my-heavy-innodb....cnf detailed files.
+
+## do not forget to set to utf8 /etc/mysql/conf.d/mariadb.cnf 

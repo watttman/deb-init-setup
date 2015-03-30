@@ -1,0 +1,5 @@
+# Some must-be packages to add:
+apt-get install ethtool apt-show-versions apt-file htop wget iptables-persistent logwatch ntp tree debsums rsync nmap deborphan mc
+
+# install sqlite3 client
+apt-get install sqlite3

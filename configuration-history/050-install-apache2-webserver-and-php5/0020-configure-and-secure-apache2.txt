@@ -1,0 +1,145 @@
+# Debian apache config is in /etc/apache2/apache2.conf
+# also uninmortant htaccess defaults in /etc/default/apache2
+
+# /etc/apache2/apache2.conf by default loads includes in this order:
+# root@debian-lamp:~# cat /etc/apache2/apache2.conf | grep -v '^#' | grep 'nclude'
+#
+# IncludeOptional mods-enabled/*.load
+# IncludeOptional mods-enabled/*.conf
+# Include ports.conf
+# IncludeOptional conf-enabled/*.conf
+# IncludeOptional sites-enabled/*.conf
+
+# attention includes: some directives may be overwrtitten, some may be ADDED (Listen, NameVirtualHost, etc)
+
+
+# FIX ports.conf
+# disable defaults *:80, and change with SPECIFIC IP:port combination(s) which will be used by the servers' virtualhosts
+# use included ports.conf -> more explanations there how vhost matching is done
+# also see https://httpd.apache.org/docs/2.2/vhosts/ , and for details https://httpd.apache.org/docs/2.2/vhosts/details.html
+# After reconfiguring ports (Listen directives - NameVirtualHost is now deprecated); use /etc/init.d/apache2 restart to assure it is fine
+# may complain for lack of matching virtualhosts at this stage - this is normal
+# test also netstat -anp | grep tcp to confirm it is bound properly
+# now you can open port(s) in firewall and test bare apache
+# at this point apache2 _default_ server will still reply to non-matching virtualhosts (000-default *:80 does not match *:8080 for example!) - b/c of the default /var/www precompiled value for _default_ server document root
+
+
+# make templates directory for repeating configs in vhosts
+# use included /etc/apache2/site-templates/default.conf template
+# mkdir -p /etc/apache2/site-templates
+# cp ....default.conf /etc/apache2/site-templates
+
+# disable default site
+a2dissite 000-default
+/etc/init.d/apache2 restart
+
+# enable catchall to block non-matching servernames, per port:ip vhost entries
+# use the included 000-catchall, copy it to /etc/apache2/sites-available and enable it
+# cp ....000-catchall.conf /etc/apache2/sites-available/
+a2ensite 000-catchall
+/etc/init.d/apache2 restart
+# it uses the default template above, to secure all non-matching hostnames per all possible sockets
+# how the match must be done: note vhost definition in 000-catchall + comments there,  and compare ip:ports list to the one in ports.conf
+
+# enable rewrite module
+a2enmod rewrite
+/etc/init.d/apache2 restart
+
+# verify all is operational
+# at this point, each access to any ip:port hostname, should result in "Forbidden" 
+# b/c vhosts for hostname's dont exist yet - and they are matched only by 000-catchall (which blocks all filesystem access via the default site-template)
+
+
+
+
+### APACHE2 SECURITY
+# Edit /etc/apache2/conf-available/security, disable access to filesystem by default server!
+# Important, in case for some reason catchall does not match the cals and they fallback to _default_ server settings -  which are ALL OPEN by default heck!
+# once done, now _default_ server does not reply to non-matching virtualhosts anymore - all goes to 000-catchall
+#<Directory />
+#        AllowOverride None
+#        Order Allow,Deny
+#        Deny from all
+#</Directory>
+#
+# Make sure svn and git subdirs are also blocked by corresponding directory entries (add for .git if needed)
+#
+<DirectoryMatch "/\.svn">
+   Require all denied
+</DirectoryMatch>
+<DirectoryMatch "/\.git">
+   Require all denied
+</DirectoryMatch>
+
+#
+# To minimize attack surface, take also other measures in /etc/apache2/conf-available/security , in particular:
+#ServerTokens Prod
+#ServerSignature Off
+#TraceEnable Off
+#
+#If desired, enable mod_headers and apply header-based security fixes in /etc/apache2/conf-available/security
+#Header set X-Content-Type-Options: "nosniff"
+#Header set X-Frame-Options: "sameorigin"
+#a2enmod headers
+#/etc/init.d/apache2 restart
+
+# disable autoindex and cgi module (we run php5 via libapache2-mod-php5 i.e. as apache module - and not cgi module - so we can disable cgi)
+a2dismod autoindex
+a2dismod cgi
+/etc/init.d/apache2 restart
+# NOTE: disabling autoindex gives WARNING: The following essential module will be disabled. This might result in unexpected behavior and should NOT be done unless you know exactly what you are doing!
+#
+# optionally, may disable also 'status' module, although in the default config + above it should be secure (i.e. will not allow http://host/server-status access except for connections originating from localhost)
+#
+
+# in /etc/apache2/envvars: set default umask to 027 so the apache created files have permissions 640 (rw- r-- ---) i.e. should not be readable by anyone
+# umask 027
+
+
+# the one below should be already be provided in the demo site template, and implemented in create-apache-virtualhost.sh script
+#
+# for virtual sites configs, inside webroot directory, use
+#<LimitExcept GET POST OPTIONS>
+#	Order Allow,Deny
+#	Deny from all
+#</LimitExcept>
+#
+
+
+
+
+# use included scripts to quickly build functional vhosts by template.
+# 
+# ./create-apache-virtualhost.sh 192.168.167.184 8000 host1-debian-box.local /var/www/debianlampuser/host1-debian-box.local/web
+# ./reset-website-dirs.sh debianlampuser host1-debian-box.local
+#
+# for details of arguments and usage with basic and advanced templates, look inside script comments
+#
+
+
+
+### PHP security
+
+# Disable expose_php so it does not return in server response headers - revealing the PHP version - aka "X-Powered-By: PHP/5.4.4-14+deb7u7"
+# sed -i 's/expose_php = On/expose_php = Off/' /etc/php5/apache2/php.ini
+# This CAN'T be fixed by php directives inside vhosts!
+
+# most other protection items for apache php module, are enabled dynamically via apache-configs for vhosts;
+# see into create_site.sh script; and correspondig /etc/apache2/sites-enabled/* hosts
+# and also enforced by hosting directory/permission hierarchy in /var/www ; again see create_site.sh script
+
+
+#	IMPORTANT!!
+#; NOTE: If you are using the subdirectory option for storing session files
+#;       (see session.save_path above), then garbage collection does *not*
+#;       happen automatically.  You will need to do your own garbage
+#;       collection through a shell script, cron entry, or some other method.
+#;       For example, the following script would is the equivalent of
+#;       setting session.gc_maxlifetime to 1440 (1440 seconds = 24 minutes):
+#;          cd /path/to/sessions; find -cmin +24 | xargs rm
+#
+# Because we use different session paths for different sites - better use in conjuctiion gc_probability gc_divisor gc_maxlifetime (they will not interfere)
+# see also in documentation http://ca2.php.net/manual/en/session.configuration.php#ini.session.gc-probability
+# This is reflected in create_site.sh
+#
+

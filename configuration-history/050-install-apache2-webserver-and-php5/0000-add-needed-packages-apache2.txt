@@ -1,0 +1,11 @@
+# Note that the one below will install apache using mpm_event module by default.
+# Later, PHP installation will eventually replace it with mpm_prefork module
+apt-get update && apt-get install apache2
+
+# the next one is needed if we have Nginx as a frontend or other proxy; so apache properly understands the remote IP
+# module for Apache2 which takes the last IP from the 'X-Forwarded-For' header
+apt-get update && apt-get install libapache2-mod-rpaf
+
+## Restart
+/etc/init.d/apache2 restart
+

@@ -1,0 +1,31 @@
+##
+## See the enclosed nginx config
+##
+## mkdir -p /etc/nginx/site-templates/
+##
+## essential files (modified from the default install, or added):
+## -- nginx.conf
+## -- proxy_params
+## -- /etc/nginx/sites-available/catchall-nonmatching
+## -- /etc/nginx/sites-available/host1-debian-box.local
+## -- /etc/nginx/site-templates/default-frontend-proxy-vhost-cfg
+##
+##
+
+## enable port 80 in firewall to public
+
+## Enable apache2 vhost to listen also to 127.0.0.1:8000 (automate it by adding by default this IP:port to create-apache-virtualhost.sh ??? )
+
+## Now the host1-debian-box.local should be avail via nginx
+
+## disable apache's gzip and other unneeded modules (we dont need gzip between apache and nginx)
+## a2dismod deflate
+## a2dismod negotiation # not sure, seems to work fine with basic tests, reenable if there are any issues?
+## ##??## not sure for this: a2dismod ssl
+##
+
+
+## eventually disable port 8000 from anything but 127.0.0.1, both in iptables and apache2 config
+
+## see also this https://www.vultr.com/docs/setup-nginx-as-reverse-proxy-over-apache-on-debian-ubuntu
+

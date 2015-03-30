@@ -1,0 +1,105 @@
+	###
+	## Shared settings for all virtual hosts - to be included inside all 'server' directives (unless we need something exotic)
+	## for other, even more generic shared settings, see the upper 'http' context
+	###
+
+	index index.html index.php;
+
+	# About the order for which locations are evaluated (http://nginx.org/en/docs/http/request_processing.html):
+	#
+	# nginx first searches for the most specific prefix location given by literal strings regardless of the listed order. 
+	# In the configuration above the only prefix location is “/” and since it matches any request it will be used as a last resort. 
+	# Then nginx checks locations given by regular expression in the order listed in the configuration file. The first matching expression 
+	# stops the search and nginx will use this location. If no regular expression matches a request, then nginx uses the most specific prefix 
+	# location found earlier. 
+	
+
+
+        # don't log ico not found; same for robots.txt
+        location = /favicon.ico {
+                log_not_found off;
+                access_log off;
+        }
+
+        location = /robots.txt {
+                allow all;
+                log_not_found off;
+                access_log off;
+        }
+
+
+        # handle static files directly. Set their expiry time to 30 days, so they'll
+        # always use the browser cache after first request.
+        # don't cache them locally
+        # location ~* \.(js|css|jpg|jpeg|gif|png|svg|ico|pdf|html|htm|txt)$ {
+	location ~* ^.+.(js|css|jpg|jpeg|gif|png|svg|ico|pdf|html|htm|zip|tgz|gz|rar|bz2|doc|xls|ppt|txt|tar|mid|midi|wav|bmp|rtf)$ {
+                expires      30d;
+                # add_header Pragma public;
+                # add_header Cache-Control "public, must-revalidate, proxy-revalidate";
+        }
+
+
+        # Block protected etc stuff for Yii (just in case; need to be blocked anyway by apache, or out of the web tree!)
+        location ~* ^/(protected|framework|themes/\w+/views) {
+                deny  all;
+        }
+
+        # Block access to .htaccess and .htpassword files, to .git and .svn stuff
+	location ~* /\.(ht|svn|git) {
+		deny all;
+	}
+
+
+	# allow ANY php files for execution and pass to apache backend - not so secure
+        #location ~* \.php$ {
+        #        proxy_pass http://127.0.0.1:8000;
+        #        include /etc/nginx/proxy_params;
+	#
+        #        # disable local caching for php requests; we want to serve fresh db content
+        #        proxy_cache off;
+        #}
+
+	# alternatively to above commented block for tightened security, allow only index.php for execution by apache, forbid all other php's
+	# to prevent executing malicious scripts from apache/php-writable directories like files/images, etc
+	# appropriate for apps with single php entry point like yiii
+        location ~* ^/index.php {
+                proxy_pass http://127.0.0.1:8000;
+                include /etc/nginx/proxy_params;
+
+                # disable local caching for php requests; we want to serve fresh db content
+                proxy_cache off;
+        }
+	# deny non-root empty dirs indexing, i.e. locations ending with trailing /
+        location ~* ^.+/$ {
+		deny all;
+        }
+	# PHP scripts due to above directive will not be executed but will be downloaded/code visible by location / match below - we MUST block this!!!
+	location ~* \.php$ {
+    		# return 403;
+		deny all;
+	}
+
+
+
+
+	# this matches everything and is used as a last resort, if all of the above do not match
+        location / {
+                try_files $uri @proxy;
+        }
+
+
+        location @proxy {
+                proxy_pass http://127.0.0.1:8000;
+
+                include /etc/nginx/proxy_params;
+
+                # disable local caching for generic requests; we want to serve fresh db content
+                proxy_cache off;
+        }
+
+
+
+
+
+
+

@@ -1,0 +1,75 @@
+# Configure logwatch after install:
+
+#mkdir /var/cache/logwatch
+#cp /usr/share/logwatch/default.conf/logwatch.conf /etc/logwatch/conf/
+
+# Fix config to send to mail instead to stdout:
+#nano /etc/logwatch/conf/logwatch.conf
+# Replace/comment the line:
+##Output = stdout
+#Output = mail
+
+# optionally: 
+# Format = html
+# Detail = Med
+
+
+
+
+
+
+
+####
+#### Configure logwatch for NGINX:
+####
+
+cp /usr/share/logwatch/scripts/services/http /etc/logwatch/scripts/services/nginx
+cp /usr/share/logwatch/default.conf/services/http.conf /etc/logwatch/conf/services/nginx.conf
+cp /usr/share/logwatch/default.conf/logfiles/http.conf /etc/logwatch/conf/logfiles/nginx.conf
+
+edit /etc/logwatch/conf/logfiles/nginx.conf :
+LogFile = 
+LogFile = nginx/*access.log
+LogFile = nginx/*access.log.1
+Archive =
+# Archive = nginx/*access.log.*.gz
+
+*ExpandRepeats
+# *ApplyhttpDate
+
+edit /etc/logwatch/conf/services/nginx.conf:
+Title = "nginx"
+LogFile = nginx
+
+
+
+
+
+####
+#### Configure logwatch for APACHE
+####
+
+cp /usr/share/logwatch/default.conf/logfiles/http.conf /etc/logwatch/conf/logfiles/
+
+edit /etc/logwatch/conf/logfiles/http.conf :
+LogFile = 
+LogFile = apache2/*access.log
+LogFile = apache2/*access.log.1
+Archive =
+# Archive = apache2/*access.log.*.gz
+
+*ExpandRepeats
+# *ApplyhttpDate
+
+
+
+
+
+
+
+####
+#### Test:
+####
+logwatch --output stdout --service nginx # --debug 5
+logwatch --output stdout --service http # --debug 5
+

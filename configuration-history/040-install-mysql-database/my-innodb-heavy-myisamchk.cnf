@@ -1,0 +1,30 @@
+#BEGIN CONFIG INFO
+#DESCR: 4GB RAM, InnoDB only, ACID, few connections, heavy queries
+#TYPE: SYSTEM
+#END CONFIG INFO
+
+#
+# This is a MySQL example config file for systems with 4GB of memory
+# running mostly MySQL using InnoDB only tables and performing complex
+# queries with few connections.
+# 
+# MySQL programs look for option files in a set of
+# locations which depend on the deployment platform.
+# You can copy this option file to one of those
+# locations. For information about these locations, see:
+# http://dev.mysql.com/doc/mysql/en/option-files.html
+#
+# In this file, you can use all long options that a program supports.
+# If you want to know which options a program supports, run the program
+# with the "--help" option.
+#
+# More detailed information about the individual options can also be
+# found in the manual.
+#
+
+[myisamchk]
+key_buffer_size = 512M
+sort_buffer_size = 512M
+read_buffer = 8M
+write_buffer = 8M
+

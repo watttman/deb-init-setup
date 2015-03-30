@@ -1,0 +1,8 @@
+apt-get update; apt-get install mariadb-server mariadb-client
+
+## Secure it, run:
+# mysql_secure_installation
+
+## Restart
+# /etc/init.d/mysql restart
+

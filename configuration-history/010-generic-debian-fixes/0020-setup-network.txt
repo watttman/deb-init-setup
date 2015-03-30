@@ -1,0 +1,46 @@
+# checkup /etc/hosts , add if something is needed
+# typical proper config:
+
+#127.0.0.1       localhost
+#127.0.1.1       debianlamp.localdomain  debianlamp
+#
+# The following lines are desirable for IPv6 capable hosts
+#::1     localhost ip6-localhost ip6-loopback
+#ff02::1 ip6-allnodes
+#ff02::2 ip6-allrouters
+
+
+# If needed, setup /etc/network/interfaces
+# Sample /etc/network/interfaces :
+
+###
+## This file describes the network interfaces available on your system
+## and how to activate them. For more information, see interfaces(5).
+#
+## The loopback network interface
+#auto lo
+#iface lo inet loopback
+#
+## The primary network interface
+#allow-hotplug eth0
+#iface eth0 inet static
+#        address 192.168.123.20
+#        netmask 255.255.255.0
+#        network 192.168.123.0
+#        broadcast 192.168.123.255
+#        gateway 192.168.123.1
+#        # next dns-* options are implemented by the resolvconf package, if installed
+#        # dns-nameservers 192.168.167.1
+#        # dns-search local
+#
+###
+
+# for DNS: basically, fix /etc/resolv.conf
+
+
+
+# for DNS nameservers, see also here
+# https://wiki.debian.org/NetworkConfiguration#Defining_the_.28DNS.29_Nameservers
+
+# For general information, same link:
+# https://wiki.debian.org/NetworkConfiguration

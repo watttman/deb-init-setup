@@ -1,0 +1,26 @@
+
+######################################
+# ONLY ONCE PER CLIENT COMPUTER !!! (keys will be stored and used with the non-root user wallet) 
+######################################
+#
+# Generate the client-user-computer's RSA keypair:
+#
+# ssh-keygen -t rsa # defaults to 2048 bit key
+# ssh-keygen -t rsa -b 4096 # use this for 4096 bit key
+#
+
+
+######################################
+# Then copy the public part of the key - add it to all servers' (under their root account) which you want to identify you by this key,
+# when loging to these as root 
+######################################
+#
+# (server must allow root password login to be able to copy the key, afterwards may disable root password login again in /etc/ssh/sshd_config
+#
+# ssh-copy-id root@targetserver.org
+#
+# Then use to login like this: ssh root@targetserver.org
+#
+
+
+

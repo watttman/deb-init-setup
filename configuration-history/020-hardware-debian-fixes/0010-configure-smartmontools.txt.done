@@ -1,0 +1,18 @@
+# variants of config
+
+# variant1
+# /dev/sda -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca                                                                                            
+# /dev/sdb -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca   
+
+# variant2
+# DEVICESCAN -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca   
+
+# variant3
+# DEVICESCAN -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03)
+
+# variant4 (laptop/GUI)
+# DEVICESCAN -d removable -n standby -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m root -M exec /root/smartd-error-notify-all.sh
+
+# see man smartd.conf for more details
+
+

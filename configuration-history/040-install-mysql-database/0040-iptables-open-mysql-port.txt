@@ -1,0 +1,9 @@
+# enable port 3306 inserting before last entry in INPUT chain
+iptables -I INPUT $(iptables -L INPUT --line-numbers | tail -n 1 | awk -F' ' '{print $1}') -p tcp --dport 3306 -j ACCEPT
+
+iptables -vnL
+
+### if all OK, save the iptables config:
+/etc/init.d/netfilter-persistent save
+
+

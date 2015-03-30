@@ -1,0 +1,23 @@
+# Some must-be packages to add:
+# apt-get update; apt-get install smartmontools hdparm hwinfo lshw
+
+# install firmware as needed
+apt-get install firmware-linux firmware-linux-free firmware-linux-nonfree 
+apt-get install firmware-iwlwifi bluez-firmware firmware-atheros firmware-bnx2 firmware-bnx2x firmware-brcm80211 firmware-crystalhd firmware-intelwimax firmware-ipw2x00 firmware-ivtv firmware-iwlwifi firmware-libertas firmware-myricom firmware-netxen firmware-qlogic firmware-ralink firmware-realtek bluez-firmware
+apt-get install intel-microcode amd64-microcode
+
+
+# install lm-sensors, rfkill
+apt-get install lm-sensors rfkill
+
+
+# install cpufrequtils
+apt-get install cpufrequtils
+
+# install memtest86+
+apt-get install memtest86+
+update-grub
+
+
+# what else?
+

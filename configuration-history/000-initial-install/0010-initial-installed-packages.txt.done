@@ -1,0 +1,3 @@
+# the following package list was generated using
+# dpkg -l | grep ^i | awk '{print $2}' > /root/configuration-history/000-initial-install/0010-initial-installed-packages.dumptxt
+# after initial install completed
