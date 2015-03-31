@@ -4,8 +4,18 @@
 #
 # INSTALL FRAMEWORK
 #
+# RUN AS DEVEL USER
+# This will create a dir [projectdir] inside current directory, and will install inside the yii2-app-basic template
+# so run as DEVEL USER, in /var/www/... hierarchy; the web/index.php will be in ./[projectdir]/web/index.php
+# Will complain for non-empty directory, so first remove the dir if extists, and then it seems the reset_website_dirs.sh script 
+# must be run AFTER it website template is created
 #
+# composer create-project --prefer-dist yiisoft/yii2-app-basic [projectdir]
+composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.local
 #
+# At this point we have pristine Yii 2 basic project template install (without {log,session,tmp} directories} which our PHP setup needs)
+
+
 # CHECK PREREQUISITES
 #
 #

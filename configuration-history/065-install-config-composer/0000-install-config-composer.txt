@@ -1,0 +1,23 @@
+# RUN AS ROOT (this will make composer binary only executable by non-root)
+# If you do not already have Composer installed, you may do so by following the instructions at getcomposer.org. On Linux and Mac OS X, you'll run 
+# the following commands:
+curl -s http://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+# Installs the composer asset plugin which allows managing bower and npm package dependencies through Composer
+ 
+# (something related to management of project assets (css, js, etc.) in your composer.json without installing NPM or Bower. For more 
+# details, see https://github.com/francoispluchino/composer-asset-plugin/
+# Only need to run this command once for all (per username, b/c it installs some global composer config for this user, in ~/.composer)
+# Running the command as root, installs stuff as follows:
+#  Changed current directory to /root/.composer
+#  ./composer.json has been created
+#  Loading composer repositories with package information
+#  Updating dependencies (including require-dev)
+#    - Installing fxp/composer-asset-plugin (v1.0.0)
+#      Downloading: 100%         
+# 
+#  Writing lock file
+#  Generating autoload files
+#  RUN AS A NORMAL USER (NON-ROOT) UNDER WHICH THE DEVEL WILL BE DONE, TO CREATE THE CONFIG UNDER THIS USER homedir 
+composer global require "fxp/composer-asset-plugin:1.0.0"
