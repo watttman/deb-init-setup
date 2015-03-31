@@ -84,7 +84,8 @@ echo "--> Fixing filesystem permissions for vhost site dir..."
 # set siteuser:www-data + sticky guid bit to dirs so all created belongs to apache group
 # fix: do not touch any dirs out of {tmp,log,session} !
 # chown -R ${SITEUSER}:www-data ${ABS_SITE_DIR}
-chown ${SITEUSER}:www-data ${ABS_SITE_DIR}
+# TODO AFTER testing Yii2 template install, may need to uncomment next line
+# chown ${SITEUSER}:www-data ${ABS_SITE_DIR}
 chown ${SITEUSER}:www-data ${ABS_SITE_DIR}/{tmp,log,session}
 
 # set readwrite:readwrite siteuser:www-data so both apache/php can write in tmp,log
