@@ -16,18 +16,36 @@
 
 ## enable port 80 in firewall to public
 
-## Enable apache2 vhost to listen also to 127.0.0.1:8000 (automate it by adding by default this IP:port to create-apache-virtualhost.sh ??? )
+## Enable apache2 vhost to listen also to 127.0.0.1:8000 (automate it by adding by default this IP:port to create-apache-virtualhost.sh ? )
 
 ## Now the host1-debian-box.local should be avail via nginx
 
+## eventually disable port 8000 from anything but 127.0.0.1, both in iptables and apache2 config
+
+
+## PROPER CLIENT IP IN CASE OF NGINX PROXY:
+#
 ## disable apache's gzip and other unneeded modules (we dont need gzip between apache and nginx)
 ## a2dismod deflate
 ## a2dismod negotiation # not sure, seems to work fine with basic tests, reenable if there are any issues?
 ## ##??## not sure for this: a2dismod ssl
 ##
-
-
-## eventually disable port 8000 from anything but 127.0.0.1, both in iptables and apache2 config
-
-## see also this https://www.vultr.com/docs/setup-nginx-as-reverse-proxy-over-apache-on-debian-ubuntu
+## for apache2 >= 2.2, enable remoteip (rpaf not anymore adequate!):
+# copy configurarion for remoteip... 
+# From apache2 side, we need global: 
+#  RemoteIPHeader X-Real-IP
+#  RemoteIPInternalProxy 127.0.0.1 ::1
+# From nginx side, we need global: in /etc/nginx/proxy_params
+#  proxy_set_header Host $http_host;
+#  proxy_set_header X-Real-IP $remote_addr;
+#  proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#  proxy_set_header X-Forwarded-Proto $scheme;
+cp ../050-install-apache2-webserver-and-php5/etc/apache2/conf-available/remoteip.conf /etc/apache2/conf-available/remoteip.conf 
+a2enmod remoteip
+a2dismod rpaf
+apt-get purge libapache2-mod-rpaf
+#
+# now in /etc/apache2/apache2.conf, replace default logging formats
+# replace in these %h with %a , so they log the proper remote IP which proxy reports
+#
 

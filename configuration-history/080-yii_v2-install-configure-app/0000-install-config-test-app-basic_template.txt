@@ -28,13 +28,46 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.lo
 
 
 
-
 ###
-### Install test/demo web application
+### Verify test/demo web application
 ###
 #
+# At this point we should have operational basic app template in browser
+#
+# 1) Proxying the proper client IP
+# Verify using the following code in /var/www/debian-uat-user/host1-debian-box.local/views/site/about.php
+# 
+#	echo "<br/><br clear='all'/><p>Server Vars</p>";
+#       echo "<code>";
+#       echo "Server HTTP_X_REAL_IP: "; echo array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : 'N/A'; echo  "<br/>";
+#	echo "Server HTTP_X_FORWARDED_FOR: "; echo array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : 'N/A'; echo  "<br/>";
+#	echo "Server SERVER_ADDR: " . $_SERVER['SERVER_ADDR'] . "<br/>";
+#	echo "Server SERVER_PORT: " . $_SERVER['SERVER_PORT'] . "<br/>";
+#	echo "Server REMOTE_ADDR: " . $_SERVER['REMOTE_ADDR'] . "<br/>";
+#	echo "Server REMOTE_PORT: " . $_SERVER['REMOTE_PORT'] . "<br/>";
+#	echo "<br/>";
+#	echo "Yii2 thinks remote IP is: " . Yii::$app->getRequest()->getUserIP() . "<br/>";
+#	echo "</code>";
+#
+# If this does not show the proper IP, its a remoteip module issue (unless for apache2<2.2 we need the rpaf module). See nginx (and maybe apache2) install
+#
+# Verify apache2 logs when accessing via nginx, in /var/log/apache2/var/log/apache2/host1-debian-box.local_access.log
+# must show proper remote ip when accessing via nginx
+# if not, refer to nginx/apache2 install:
+# In /etc/apache2/apache2.conf, replace default logging formats
+# replace in these %h with %a , so they log the proper remote IP which proxy reports
 #
 #
+#
+# 1) The debug toolbar: Once the IP proxying is okay, May not show even in nginx. Reason: By default, the debug module 
+# only works when browsing the website from localhost..
+# This can be remedied by changing in config/web.php to enable the debug from remote ip's:
+#    # $config['modules']['debug'] = 'yii\debug\Module';
+#    $config['modules']['debug']['class'] = 'yii\debug\Module';
+#    $config['modules']['debug']['allowedIPs'] = ['192.168.100.1', '127.0.0.1', '::1'];
+#
+#
+# 3) Pretty url's seem not to be working out of the box?
 #
 #
 #
