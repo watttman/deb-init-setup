@@ -77,11 +77,9 @@ cat > ${APACHEVSITES_DIR}/${HOST}.conf <<DELIMITER
         <Directory ${ABS_SITE_ROOTDIR}>
                 Options +FollowSymLinks
                 AllowOverride None
-                Order Allow,Deny
-                Allow from all
+		Require all granted
 		<LimitExcept GET POST OPTIONS>
-			Order Allow,Deny
-			Deny from all
+			Require all denied
 		</LimitExcept>
 
 	        ###

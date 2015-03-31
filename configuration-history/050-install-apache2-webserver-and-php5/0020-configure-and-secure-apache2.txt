@@ -54,9 +54,27 @@ a2enmod rewrite
 
 ### APACHE2 SECURITY
 
-# Edit /etc/apache2/conf-available/security, disable access to filesystem by default server!
+# Disable access_compat module (will not understand anymore Order, Allow, Deny directives - replaced in 2.4 by Require all denied/granted, 
+# Require host, Require ip etc )
+a2dismod access-compat
+# will raise warning - confirm ; )
+
+# Edit /etc/apache2/conf-available/security:
+#
+# disable access to filesystem by default server!
 # Important, in case for some reason catchall does not match the cals and they fallback to _default_ server settings -  which are ALL OPEN by default heck!
 # once done, now _default_ server does not reply to non-matching virtualhosts anymore - all goes to 000-catchall
+#
+# Make sure svn and git subdirs are also blocked by corresponding directory entries (this also exists in vhost configs/templates, but better twice 
+# than sorry)
+# Prevent .git and .svn hierarchy files from being accessed
+<DirectoryMatch "/\.svn">
+   Require all denied
+</DirectoryMatch>
+<DirectoryMatch "/\.git">
+   Require all denied
+</DirectoryMatch>
+
 
 # Comment out all Directory entries from global configuration in /etc/apache2/apache2.conf
 # (this disables running debian apps from /usr/share/, and default /var/www/ hierarchies): 
@@ -83,17 +101,6 @@ a2enmod rewrite
 #       AllowOverride None
 #       Require all granted
 #</Directory>
-
-
-# Make sure svn and git subdirs are also blocked by corresponding directory entries (this also exists in vhost configs/templates, but better twice 
-# than sorry)
-# Prevent .git and .svn hierarchy files from being accessed
-<DirectoryMatch "/\.svn">
-   Require all denied
-</DirectoryMatch>
-<DirectoryMatch "/\.git">
-   Require all denied
-</DirectoryMatch>
 
 
 # To minimize attack surface, take also other measures in /etc/apache2/conf-available/security , in particular:
@@ -124,10 +131,8 @@ a2dismod cgi
 #
 # for virtual sites configs, inside webroot directory, use
 #<LimitExcept GET POST OPTIONS>
-#	Order Allow,Deny
-#	Deny from all
+#	Require all denied
 #</LimitExcept>
-#
 
 
 
