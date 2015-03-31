@@ -10,7 +10,9 @@
 ## -- /etc/nginx/sites-available/host1-debian-box.local
 ## -- /etc/nginx/site-templates/default-frontend-proxy-vhost-cfg
 ##
+## Assure to use proper root directory paths in /etc/nginx/sites-available/host1-debian-box.local (adjust to current install!!)
 ##
+## TODO: automate generation of new nginx sites, similar to apache2 site creation automation
 
 ## enable port 80 in firewall to public
 

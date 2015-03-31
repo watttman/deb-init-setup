@@ -9,6 +9,11 @@ apt-get update && apt-get install php5-mysql php5-pgsql php5-sqlite php5-sybase
 # PHP graphics (for captchas) and crypto modules (for better password crypting etc); also for frameworks as Yii
 apt-get update && apt-get install php5-gd php5-mcrypt
 
+# PHP intl extension needed for full internationalization by Yii2
+# PHP Intl extension 1.0.2 or higher is required when you want to use advanced parameters formatting in Yii::t(), non-latin 
+# languages with Inflector::slug(), IDN-feature of EmailValidator or UrlValidator or the yii\i18n\Formatter class
+apt-get update && apt-get install php5-intl
+
 # PHP APCu (Alternative PHP Cache) and pear (extension application repository) modules; for speed and frameworks as Yii
 apt-get update && apt-get install php5-apcu php-pear
 

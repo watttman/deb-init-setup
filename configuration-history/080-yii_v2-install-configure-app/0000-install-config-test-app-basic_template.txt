@@ -16,10 +16,17 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.lo
 # At this point we have pristine Yii 2 basic project template install (without {log,session,tmp} directories} which our PHP setup needs)
 
 
-# CHECK PREREQUISITES
+# CHECK Yii2 PREREQUISITES
 #
-#
-#
+# Must check in browser (from console some features can not be catched so fake warnings appear), create temporary symbolic link 
+# to verify prerequisites (root files other than /index.php should be allowed!) 
+# cd [projectdir]/web
+# ln ../requirements.php
+# ** check in browser http://hostname/requirements.php **
+# ** once okay, remove: **
+# rm requirements.php
+
+
 
 
 ###
