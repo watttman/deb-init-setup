@@ -1,0 +1,42 @@
+###
+### Install Yii 2 framework, and check accessibility and prerequisites
+###
+#
+# INSTALL FRAMEWORK
+#
+#
+#
+# CHECK PREREQUISITES
+#
+#
+#
+
+
+###
+### Install test/demo web application
+###
+#
+#
+#
+#
+#
+#
+#
+#
+
+###
+### Reallocate directories to proper physical places (apache vhost config MUST be able to follow symlinks for all this to work)
+###
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+
