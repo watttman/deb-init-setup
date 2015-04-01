@@ -1,7 +1,8 @@
 ###
 ### Install Yii 2 framework, and check accessibility and prerequisites
 ###
-#
+
+
 # INSTALL FRAMEWORK
 #
 # RUN AS DEVEL USER
@@ -16,6 +17,7 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.lo
 # At this point we have pristine Yii 2 basic project template install (without {log,session,tmp} directories} which our PHP setup needs)
 
 
+
 # CHECK Yii2 PREREQUISITES
 #
 # Must check in browser (from console some features can not be catched so fake warnings appear), create temporary symbolic link 
@@ -28,9 +30,8 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.lo
 
 
 
-###
-### Verify test/demo web application
-###
+# VERIFY THE TEST/DEMO YII2 BASIC TEMPLATE WEB APPLICATION
+#
 #
 # At this point we should have operational basic app template in browser
 #
@@ -59,7 +60,7 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.lo
 #
 #
 #
-# 1) The debug toolbar: Once the IP proxying is okay, May not show even in nginx. Reason: By default, the debug module 
+# 2) The debug toolbar: Once the IP proxying is okay, May not show even in nginx. Reason: By default, the debug module 
 # only works when browsing the website from localhost..
 # This can be remedied by changing in config/web.php to enable the debug from remote ip's:
 #    # $config['modules']['debug'] = 'yii\debug\Module';
@@ -70,13 +71,15 @@ composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.lo
 # 3) Pretty url's seem not to be working out of the box?
 #
 #
-#
+# 4) HTTPS test (nginx as reverse proxy to apache) 
+# TODO 
 #
 #
 
-###
-### Reallocate directories to proper physical places (apache vhost config MUST be able to follow symlinks for all this to work)
-###
+
+
+# Reallocate directories to proper physical places (apache vhost config MUST be able to follow symlinks for all this to work)
+#
 #
 #
 #
