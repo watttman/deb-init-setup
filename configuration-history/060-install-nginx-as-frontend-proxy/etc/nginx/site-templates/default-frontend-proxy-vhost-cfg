@@ -32,7 +32,7 @@
         # always use the browser cache after first request.
         # don't cache them locally
         # location ~* \.(js|css|jpg|jpeg|gif|png|svg|ico|pdf|html|htm|txt)$ {
-	location ~* ^.+.(js|css|jpg|jpeg|gif|png|svg|ico|pdf|html|htm|zip|tgz|gz|rar|bz2|doc|xls|ppt|txt|tar|mid|midi|wav|bmp|rtf)$ {
+	location ~* ^.+.(js|css|jpg|jpeg|gif|png|svg|ico|pdf|html|htm|zip|tgz|gz|rar|bz2|doc|xls|xml|ppt|txt|tar|mid|midi|wav|bmp|rtf)$ {
                 expires      30d;
                 # add_header Pragma public;
                 # add_header Cache-Control "public, must-revalidate, proxy-revalidate";

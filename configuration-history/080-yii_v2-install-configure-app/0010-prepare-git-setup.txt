@@ -1,0 +1,86 @@
+
+## LOCAL GIT REPO INIT
+#
+# Assuming pristine installed Yii2 basic template via composer 
+#
+
+
+# cd to project base folder:
+cd /var/www/debian-uat-user/host1-debian-box.local
+
+# init git and create initial commit
+git init
+
+git config user.name "watttman"
+git config user.email "manul91@abv.bg"
+git config core.editor nano
+git config color.ui auto
+git config --local --list
+
+touch README.md
+git add README.md
+git commit -m 'Initial commit'
+
+# add remote
+git remote add origin https://github.com/watttman/Yii2-basic-base.git
+git push -u origin master
+
+
+## LOCAL GIT SETUP
+
+# create .gitignore files appropriate for Yii2 basic template
+
+# cd to project base folder:
+cd /var/www/debian-uat-user/host1-debian-box.local
+
+
+
+cat >> ./.gitignore <<DELIMITER
+
+# log, tmp and session directories
+/log
+/tmp
+/session
+
+# yii console bootstrap file
+# /yii
+
+# kate project files 
+.kateproject*
+
+# composer files
+/composer.*
+
+# bower file
+/.bowerrc
+
+DELIMITER
+
+
+
+
+cat >> config/.gitignore <<DELIMITER
+
+# local config files, including db (put all sensitive config files in *-local.php files!!!)
+*-local.php
+
+DELIMITER
+
+
+
+
+cat >> web/.gitignore <<DELIMITER
+
+# web .htaccess and web bootstrap files
+.htaccess
+# /index.php
+# /index-test.php
+
+DELIMITER
+
+
+
+
+git add .
+git commit -m 'Created project'
+
