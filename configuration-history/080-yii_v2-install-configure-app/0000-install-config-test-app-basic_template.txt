@@ -15,7 +15,9 @@
 composer create-project --prefer-dist yiisoft/yii2-app-basic host1-debian-box.local
 #
 # At this point we have pristine Yii 2 basic project template install (without {log,session,tmp} directories} which our PHP setup needs)
-
+#
+# In the future, update with (run as normal user):
+# composer update
 
 
 # CHECK Yii2 PREREQUISITES
