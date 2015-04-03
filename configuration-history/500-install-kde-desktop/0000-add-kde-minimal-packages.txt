@@ -2,6 +2,8 @@
 apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor-theme polkit-kde-1 alsa-base alsa-utils kmix knemo khelpcenter4 kmenuedit kde-config-touchpad okular-extra-backends
 
 
+# install archivers
+apt-get install zip unzip bzip2 p7zip-full rar unrar gzip zutils lzip
 
 
 # Optional: remove vlc backend and replace it with gstreamer backend... (more economical, if we will not install vlc?)
@@ -15,6 +17,14 @@ dpkg --list |grep "^rc" | cut -d " " -f 3 | xargs dpkg --purge
 
 # install fonts
 apt-get install fonts-dejavu fonts-dejavu-core fonts-dejavu-extra fonts-droid fonts-freefont-ttf fonts-liberation fonts-lyx fonts-opensymbol fonts-sil-gentium-basic fonts-texgyre gsfonts mathematica-fonts tex-gyre ttf-mscorefonts-installer ttf-mscorefonts-installer xfonts-100dpi xfonts-100dpi-transcoded xfonts-75dpi xfonts-75dpi-transcoded xfonts-base xfonts-encodings xfonts-terminus xfonts-utils
+
+# for MS fonts and Tahoma:
+apt-get install msttcorefonts
+cd ~
+wget http://www.stchman.com/tools/MS_fonts/tahoma.zip
+unzip -d /usr/share/fonts/truetype/msttcorefonts ~/tahoma.zip
+fc-cache -f -v
+rm ~/tahoma.zip
 
 
 # install mesas
