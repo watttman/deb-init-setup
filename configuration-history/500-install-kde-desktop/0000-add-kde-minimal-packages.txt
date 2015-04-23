@@ -48,7 +48,7 @@ apt-get install ktorrent pppoeconf
 
 
 # install remote and virtual machine utilities
-apt-get install krdc freerdp-X11 virt-manager ssh-askpass virtinst
+apt-get install krdc freerdp-X11 libfreerdp-plugins-standard virt-manager ssh-askpass virtinst
 
 
 # install themes
