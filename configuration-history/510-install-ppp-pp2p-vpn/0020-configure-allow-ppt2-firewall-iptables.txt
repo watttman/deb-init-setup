@@ -1,0 +1,18 @@
+#
+# Firewall - open to allow to connect as pptp client
+#
+# Need to enable GRE protocol (protocol 47) incoming in iptables (otherwise it is dropped by ctsate invalid)
+# and remember in default iptables rules
+
+# to flush libvirtd rules!
+/etc/init.d/netfilter-persistent flush 
+/etc/init.d/netfilter-persistent start
+
+iptables -I INPUT 1 -p gre -j ACCEPT
+/etc/init.d/netfilter-persistent save
+
+/etc/init.d/netfilter-persistent restart
+/etc/init.d/libvirtd restart
+
+
+

@@ -1,0 +1,16 @@
+# FILE: /etc/ppp/options.pptp
+# uncomment "require-mppe-128" line in /etc/ppp/options.pptp, about the end
+
+# FILE: /etc/ppp//etc/ppp/chap-secrets
+# edit /etc/ppp/chap-secrets
+# see local file, but DO NOT COPY OVER - EDIT IN-PLACE B/C OF FILE PERMISSIONS MUST BE RETAINED! 
+
+# FILE: /etc/ppp/peers/GuruVPN
+# see local file: create file /etc/ppp/peers/GuruVPN
+
+# usage:
+# pon GuruVPN 
+# sleep 3; ifconfig
+# poff GuruVPN
+# sleep 3; ifconfig
+
