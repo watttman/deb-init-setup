@@ -11,6 +11,18 @@
 ###
 
 
+# Colored man pages
+###
+#
+# (use most as a pager, as opposed to default)
+#
+# apt-get install most
+# update-alternatives --config pager
+#
+#
+#
+
+
 
 
 
