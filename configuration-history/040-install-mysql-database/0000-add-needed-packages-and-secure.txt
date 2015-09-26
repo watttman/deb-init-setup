@@ -6,3 +6,10 @@ apt-get update; apt-get install mariadb-server mariadb-client
 ## Restart
 # /etc/init.d/mysql restart
 
+# NOTE: May have issues, once securing installation:
+# /etc/init.d/mysql start/stop/status may stop working
+# also it may not be able to upgrade, and/or err messages in daemon.log
+# this is due to obviously securing installation making accounts in /etc/mysql/debian.cnf invalid (no permissions anymore); so scripts misbehave
+# either way, that is fixed by editing /etc/init.d/debian.cnf with proper permissions account (root); and/or adding a new full-permission user to mariadb 
+# installation (aka debian-sys-maint).
+
