@@ -2,6 +2,11 @@
 apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor-theme polkit-kde-1 alsa-base alsa-utils kmix knemo khelpcenter4 kmenuedit kde-config-touchpad okular-extra-backends
 
 
+# plasma fixes for kde5 (do not install as dependencies
+# if not already installed - install
+# apt-get install sni-qt libkf5emoticons-bin libkf5kdelibs4support5-bin
+# see also http://forum.ubuntu.ru/index.php?topic=260447.0
+
 # install archivers
 apt-get install zip unzip bzip2 p7zip-full rar unrar gzip zutils lzip
 
@@ -49,6 +54,7 @@ apt-get install ktorrent pppoeconf
 
 # install remote and virtual machine utilities
 apt-get install krdc freerdp-X11 libfreerdp-plugins-standard virt-manager ssh-askpass virtinst
+# may need to also manually add gir1.2-spice-client-gtk-3.0 for virt-manager!
 
 
 # install themes
