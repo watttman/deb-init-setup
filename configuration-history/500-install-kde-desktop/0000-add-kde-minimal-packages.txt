@@ -103,6 +103,18 @@ apt-get install flashplugin-nonfree
 # tune as appropriate (really depends on hardware)
 apt-get install powertop laptop-mode-tools powerdevil
 
+# may need to fix suspend for laptops
+nano -w /usr/share/polkit-1/actions/org.freedesktop.login1.policy 
+# change to 'yes' as needed in allow tags:
+# ....
+#       <action id="org.freedesktop.login1.suspend">
+#                <defaults>
+#                        <allow_any>auth_admin_keep</allow_any>
+#                        <allow_inactive>auth_admin_keep</allow_inactive>
+#                        <allow_active>yes</allow_active>
+#                </defaults>
+#        </action>
+# ....
 
 # install mouse functionality for console
 apt-get install gpm
