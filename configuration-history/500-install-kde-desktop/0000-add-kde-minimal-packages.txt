@@ -14,8 +14,13 @@ apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor
 #
 # see also for candidates to install
 # apt-cache depends plasma-desktop | grep Recommends
-
-
+#
+# for custom and app shortcuts to be able to work
+# apt-get install khotkeys
+#
+# support of older protocol systray icons in plasma
+# apt-get install plasma-systray-legacy
+#
 
 # install archivers
 apt-get install zip unzip bzip2 p7zip-full rar unrar gzip zutils lzip
