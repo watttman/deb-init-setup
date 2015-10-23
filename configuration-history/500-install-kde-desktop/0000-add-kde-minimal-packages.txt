@@ -22,6 +22,10 @@ apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor
 # apt-get install plasma-systray-legacy
 #
 
+# Plasma crashed!!! Needed to manually install this:
+# apt-get install libqt5xcbqpa5
+
+
 # install archivers
 apt-get install zip unzip bzip2 p7zip-full rar unrar gzip zutils lzip
 
