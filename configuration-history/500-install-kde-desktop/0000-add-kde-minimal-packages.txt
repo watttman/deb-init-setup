@@ -9,8 +9,14 @@ apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor
 # apt-get install sni-qt libkf5kdelibs4support5-bin libkf5emoticons-bin
 # see also http://forum.ubuntu.ru/index.php?topic=260447.0
 #
-# may run this to clear old configs; do only after everything installed (may lead to issues with some apps)
+# may run this to clear old configs; do only after everything installed and most things tested (may lead to issues with some apps)
 # for fl in `ls /home/manul/.kde/share/config/*rc`; do bnfl=`basename $fl`; pfl="/home/manul/.config/$bnfl"; [ -e "$pfl" ] && { rm "$fl"; echo "REMOVED $fl"; } || echo "OK $fl"; done
+# for fl in `ls -d /home/manul/.kde/share/apps/*`; do bnfl=`basename $fl`; pfl="/home/manul/.local/share/$bnfl"; [ -e "$pfl" ] && { rm -rf $fl; echo "REMOVED $fl"; } || echo "OK $fl"; done
+# for fl in `ls -d /home/manul/.kde/share/config/*`; do bnfl=`basename $fl`; pfl="/home/manul/.config/$bnfl"; [ -e "$pfl" ] && { rm -rf $fl; echo "REMOVED $fl"; } || echo "OK $fl"; done
+# rm -rf /home/manul/.kde/Autostart
+# rm /home/manul/.kde/share/config/plasma-desktoprc
+# rm -rf /home/manul/.kde/share/apps/plasma-desktop
+#
 #
 # see also for candidates to install
 # apt-cache depends plasma-desktop | grep Recommends
