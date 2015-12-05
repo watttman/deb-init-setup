@@ -23,4 +23,12 @@
 #
 
 
+######################################
+#
+# ssh may have issue connecting to specific servers (due to a router with cramped MTU somewhere on the way or similar crap) 
+#
+######################################
+
+# just add this to /etc/rc.local
+echo 2 > /proc/sys/net/ipv4/tcp_mtu_probing
 
