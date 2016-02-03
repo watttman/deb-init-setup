@@ -30,6 +30,12 @@ apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor
 
 # Plasma crashed!!! Needed to manually install this:
 # apt-get install libqt5xcbqpa5
+#
+#
+#
+# may need to install these? (recommends but... ):
+# apt-get install libkf5config-bin libkf5dbusaddons-bin libkf5iconthemes-bin libkf5khtml-bin libkf5parts-plugins libkf5xmlgui-bin
+#
 
 
 # install archivers
@@ -133,6 +139,9 @@ nano -w /usr/share/polkit-1/actions/org.freedesktop.login1.policy
 
 # install mouse functionality for console
 apt-get install gpm
+
+
+
 
 
 
