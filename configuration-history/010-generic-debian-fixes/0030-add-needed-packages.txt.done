@@ -3,3 +3,6 @@ apt-get install ethtool apt-show-versions apt-file htop wget iptables-persistent
 
 # install sqlite3 client
 apt-get install sqlite3
+
+# install zutils, unzip, etc
+apt-get install unzip zip zutils
