@@ -13,6 +13,7 @@ apt-get update && apt-get install php5-gd php5-mcrypt
 # PHP Intl extension 1.0.2 or higher is required when you want to use advanced parameters formatting in Yii::t(), non-latin 
 # languages with Inflector::slug(), IDN-feature of EmailValidator or UrlValidator or the yii\i18n\Formatter class
 apt-get update && apt-get install php5-intl
+apt-get update && apt-get install php-mbstring
 
 # PHP APCu (Alternative PHP Cache) and pear (extension application repository) modules; for speed and frameworks as Yii
 apt-get update && apt-get install php5-apcu php-pear
