@@ -1,29 +1,31 @@
 # PHP support for apache2
 # Note that the one below will eventually replace apache2 mpm_event module with mpm_prefork module
-# will also install as dependency php5-cli php5-common php5-json
-apt-get update && apt-get install libapache2-mod-php5
+# will also install as dependency php-cli php-common php-json
+
+
+# just in case, install virtual package php - it is needed
+apt-get update && apt-get install php
+
+apt-get update && apt-get install libapache2-mod-php
 
 # PHP databases & PDO support (MySQL,PostreSQL, SQLite, Sybase/MSSQL)
-apt-get update && apt-get install php5-mysql php5-pgsql php5-sqlite php5-sybase
+apt-get update && apt-get install php-mysql php-pgsql php-sqlite3 php-sybase
 
 # PHP graphics (for captchas) and crypto modules (for better password crypting etc); also for frameworks as Yii
-apt-get update && apt-get install php5-gd php5-mcrypt
+apt-get update && apt-get install php-gd php-mcrypt
 
 # PHP intl extension needed for full internationalization by Yii2
 # PHP Intl extension 1.0.2 or higher is required when you want to use advanced parameters formatting in Yii::t(), non-latin 
 # languages with Inflector::slug(), IDN-feature of EmailValidator or UrlValidator or the yii\i18n\Formatter class
-apt-get update && apt-get install php5-intl
+apt-get update && apt-get install php-intl
 apt-get update && apt-get install php-mbstring
 
 # PHP APCu (Alternative PHP Cache) and pear (extension application repository) modules; for speed and frameworks as Yii
-apt-get update && apt-get install php5-apcu php-pear
+apt-get update && apt-get install php-apcu php-pear
 
 # PHP command-line interface for scripts etc; could already be installed by the above but even in this case,
 #  will be set to 'manually installed' and will not be removed in case we decide to remove pear or apcu
-apt-get update && apt-get install php5-cli
-
-# just in case, install virtual package php5 - it is needed
-apt-get update && apt-get install php5
+apt-get update && apt-get install php-cli
 
 # for full yii support - install all of the above!
 
