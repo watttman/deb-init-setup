@@ -108,7 +108,7 @@ apt-get install exuberant-ctags
 
 
 # enhance kde config
-apt-get install kde-config-baloo-advanced kde-config-gtk-style
+apt-get install kde-config-baloo-advanced kde-config-gtk-style kde-config-gtk-style-preview kde-config-cron
 
 
 
