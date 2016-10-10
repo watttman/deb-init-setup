@@ -1,5 +1,5 @@
 # in case of nosystemd system:
-apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor-theme polkit-kde-1 alsa-base alsa-utils kmix knemo khelpcenter4 kmenuedit kde-config-touchpad okular-extra-backends
+apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor-theme polkit-kde-1 alsa-base alsa-utils kmix knemo khelpcenter4 kmenuedit kde-config-touchpad okular-extra-backends kde-config-screenlocker
 
 
 ####
@@ -72,7 +72,7 @@ update-alternatives --config x-cursor-theme
 
 
 # install utilities
-apt-get install kate qalculate-gtk okular ksnapshot 
+apt-get install kate qalculate-gtk okular kde-spectacle
 
 
 # install fs utilities
