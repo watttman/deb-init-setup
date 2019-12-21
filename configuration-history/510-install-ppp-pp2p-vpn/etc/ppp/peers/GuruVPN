@@ -1,0 +1,40 @@
+pty "pptp pptp.server.com --nolaunchpppd"
+
+# see man pppd
+
+# Set the name of the local system for authentication purposes to name.  This is a privileged option.  With this option, pppd will use  lines
+# in  the secrets files which have name as the second field when looking for a secret to use in authenticating the peer.  In addition, unless
+# overridden with the user option, name will be used as the name to send to the peer when authenticating the local system to the peer.  (Note
+# that pppd does not append the domain name to name.)
+name TheVPNUserName
+
+# Set the assumed name of the remote system for authentication purposes to name.
+remotename GuruVPN
+
+# include settings from /etc/ppp/options.pptp
+# Read options from file name (the format is described below).  The file must be readable by the user who has invoked pppd.
+file /etc/ppp/options.pptp
+
+# provides extra parameter to ip-up, ip-pre-up and ip-down scripts. If this option is given, the string supplied is given as 
+# the 6th parameter to those scripts
+ipparam GuruVPN
+
+# Require the use of MPPE, with 128-bit encryption.
+require-mppe-128
+
+# refuse unneeded protocols
+# next line will want the server to authenticate to us, disable it
+# require-mschap-v2
+refuse-eap
+refuse-pap
+refuse-chap
+refuse-mschap
+
+# more, see man pppd for details
+persist
+maxfail 0
+defaultroute
+replacedefaultroute
+usepeerdns
+
+
