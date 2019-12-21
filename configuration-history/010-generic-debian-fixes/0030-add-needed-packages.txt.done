@@ -1,8 +1,8 @@
-# Some must-be packages to add:
-apt-get install ethtool apt-show-versions apt-file htop wget iptables-persistent logwatch ntp tree debsums rsync nmap deborphan mc
+# Some must-be packages to add as we always need them:
+apt-get install ethtool apt-show-versions apt-file htop wget iptables-persistent logwatch ntp tree debsums rsync nmap deborphan mc net-tools dnsutils
 
 # install sqlite3 client
 apt-get install sqlite3
 
-# install zutils, unzip, etc
+# install zutils, unzip, etc 
 apt-get install unzip zip zutils
