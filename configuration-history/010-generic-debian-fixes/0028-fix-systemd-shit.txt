@@ -1,0 +1,3 @@
+
+# disable stupid systemd pager
+echo "SYSTEMD_PAGER=''" >>/etc/environment
