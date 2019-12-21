@@ -63,11 +63,6 @@ deb http://ftp.us.debian.org/debian/ sid main non-free contrib
 #############################################
 # install & confugure apt-listchanges
 apt-get install apt-listchanges
-
-# to check detail changelogs always, modify in /etc/apt/listchanges.conf
-frontend=pager
-email_address=
-confirm=1
-save_seen=/var/lib/apt/listchanges.db
-which=changelogs
+# configure it
+dpkg-reconfigure apt-listchanges
 

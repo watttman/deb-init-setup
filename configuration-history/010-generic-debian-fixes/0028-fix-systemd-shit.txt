@@ -1,10 +1,13 @@
-
-# disable stupid systemd pager
+#
+# disable the ridiculous systemd pager
+#
 echo "SYSTEMD_PAGER=''" >>/etc/environment
 
 
+#
 # stupid systemd: Stop Clearing My God Damned Console
 # see https://mywiki.wooledge.org/SystemdNoClear
+#
 
 # Overriding stupid settings
 # Apparently, if you want to override stupid settings in /lib/systemd/system/getty@.service you do so by creating a directory (not a file!) named /etc/systemd/system/getty@.service.d (note that the beginning and the ending are different -- it's in /etc and it ends with .d). Then, inside that directory, you create one or more files with little .INI-syntax snippets that mimic the syntax of the file from /lib or /usr/lib.
@@ -40,3 +43,19 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 # Now, you have to tell systemd to re-read the files. This step is missing in almost every other document I found.
 # systemctl daemon-reload
 # Of course, rebooting will also work. That's what I ended up doing the first time. 
+
+
+#
+# FIX THE UGLY-AS-HELL systemd interface naming
+#
+
+# figure out the mac address of the interface
+# create a file /etc/systemd/network/80-eth0.link  with the following content:
+#[Match]                                                                                                                                                                                               
+#MACAddress=08:00:27:bc:09:9f                                                                                                                                                                          
+#[Link]                                                                                                                                                                                                
+#Name=eth0    
+#
+# Important!: fix /etc/network/interfaces after the new interface name!! (or you can't login remotely after reboot)
+# update-initramfs -u && reboot
+
