@@ -45,11 +45,15 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 # Of course, rebooting will also work. That's what I ended up doing the first time. 
 
 
+
+
+
+
 #
 # FIX THE UGLY-AS-HELL systemd interface naming
 #
 
-# figure out the mac address of the interface
+# figure out what is the mac address of the current interface emp03v07systemdisfuckinhtupid7862e8716
 # create a file /etc/systemd/network/80-eth0.link  with the following content:
 #[Match]                                                                                                                                                                                               
 #MACAddress=08:00:27:bc:09:9f                                                                                                                                                                          
@@ -58,4 +62,27 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 #
 # Important!: fix /etc/network/interfaces after the new interface name!! (or you can't login remotely after reboot)
 # update-initramfs -u && reboot
+
+
+
+
+
+#
+#
+#
+# DISABLE WEIRD SERVICES WHICH UPDATE/INSTALL whatever crap without being asked!!
+# especially critical in sid systems where updates can break things and must be done manually only
+#
+#
+
+systemctl stop apt-daily.timer
+systemctl disable apt-daily.timer
+systemctl mask apt-daily.service
+    
+systemctl stop apt-daily-upgrade.timer
+systemctl disable apt-daily-upgrade.timer
+systemctl mask apt-daily-upgrade.service
+    
+systemctl daemon-reload
+
 
