@@ -1,3 +1,42 @@
 
 # disable stupid systemd pager
 echo "SYSTEMD_PAGER=''" >>/etc/environment
+
+
+# stupid systemd: Stop Clearing My God Damned Console
+# see https://mywiki.wooledge.org/SystemdNoClear
+
+# Overriding stupid settings
+# Apparently, if you want to override stupid settings in /lib/systemd/system/getty@.service you do so by creating a directory (not a file!) named /etc/systemd/system/getty@.service.d (note that the beginning and the ending are different -- it's in /etc and it ends with .d). Then, inside that directory, you create one or more files with little .INI-syntax snippets that mimic the syntax of the file from /lib or /usr/lib.
+
+# mkdir /etc/systemd/system/getty@.service.d
+# vi /etc/systemd/system/getty@.service.d/noclear.conf
+
+# All of the other documents I found seem to agree that the file you create should end with .conf. The first part of the name seems to be irrelevant.
+# Inside that file, you create a little miniature version of the .INI-file you're overriding:
+
+#[Service]
+#TTYVTDisallocate=no
+
+#    One reader claims that there must not be an empty line at the end of this file -- and that if an empty line is present, systemd will ignore the file entirely. I can find no evidence that this is true, but I suppose it's possible there are some weird bugs in specific instances of systemd in the wild. 
+# As far as I can tell by testing, all of the various getty units that systemd spawns inherit this same "unit file". That is, getty@tty1.service and getty@tty2.service and so on all inherit the configuration called getty@.service. I don't know how or why that happens. It just does. And it's a good thing, too, because otherwise you'd have to create a whole directory + file for every getty. Obviously that would be a horrible thing.
+# If you followed some other document that said to create /etc/systemd/system/getty@tty1.service.d/ then it will only affect the getty@tty1.service unit (i.e. the getty running on /dev/tty1) and not the others. If you only wanted to avoid clearing the first console and let the others clear themselves after every login session, you could do it that way.
+
+# After you've created your override, if you run systemctl cat getty@tty1.service again, you'll see your additions:
+
+#$ systemctl cat getty@tty1.service
+# /lib/systemd/system/getty@.service
+#  This file is part of systemd.
+#
+...
+
+# /etc/systemd/system/getty@.service.d/noclear.conf
+#[Service]
+#TTYVTDisallocate=no
+
+# So, you can see all of the files that constitute the "unit file" definition, all at once.
+# But there's one more step to go.
+# Re-read the file(s)
+# Now, you have to tell systemd to re-read the files. This step is missing in almost every other document I found.
+# systemctl daemon-reload
+# Of course, rebooting will also work. That's what I ended up doing the first time. 

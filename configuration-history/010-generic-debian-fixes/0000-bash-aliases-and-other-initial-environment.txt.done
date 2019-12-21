@@ -26,14 +26,18 @@
 
 
 
-# Fix resolution in console tty, add to /etc/default/grub:
+# Fix resolution in console tty + detailed log messages on start -  add to /etc/default/grub:
 ###
 #
 # GRUB_GFXMODE=1024x768
 # GRUB_GFXPAYLOAD_LINUX=1024x768
+# 
+# from GRUB_CMDLINE_LINUX_DEFAULT remove 'quiet', add 'nomodeset' option (so console is not reset after grub and GRUB_GFXPAYLOAD_LINUX comes into effect
+# 
 #
 ###
 # then run update-grub
+# reboot to verify
 ###
 
 
