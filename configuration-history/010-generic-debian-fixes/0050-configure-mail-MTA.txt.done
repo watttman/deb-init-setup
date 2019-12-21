@@ -1,8 +1,18 @@
+#
+# 
+# NOTE!!: If ipv6 is disabled:
+# add the line
+# disable_ipv6='true' 
+# to /etc/exim4/update-exim4.conf.conf file
+#
+# Then
+dpkg-reconfigure exim4-config
+# remove also the ::1 ipv6 address during config; or exim4 service will panic and keep exiting!!
+#
+
+
 # To allow sending external mail, dpkg-reconfigure exim4-config 
 # (as internet server @ 1st option, next carefully not to accept anything from outside)
-# 
-# NOTE: if ipv6 is disabled, remove also the ::1 ipv6 address during config; or exim4 service will panic and keep exiting!!
-#
 # see more https://www.debian.org/releases/stable/i386/ch08s05.html.en
 
 # Verify exim MTA is listening ONLY locally, on 127.0.0.1:25
