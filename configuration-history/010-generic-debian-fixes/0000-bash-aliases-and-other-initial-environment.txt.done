@@ -23,7 +23,12 @@
 #
 
 
-
+# Remove debian banner in SSH which discloses OS and exact package version
+#
+# Add the line
+# DebianBanner no
+# in /etc/sshd_config
+echo "DebianBanner no" >>/etc/sshd_config
 
 
 # Fix resolution in console tty + detailed log messages on start -  add to /etc/default/grub:
