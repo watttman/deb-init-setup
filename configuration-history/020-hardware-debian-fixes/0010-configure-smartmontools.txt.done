@@ -5,11 +5,11 @@
 # variants of config
 
 # variant1
-# /dev/sda -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca                                                                                            
-# /dev/sdb -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca   
+# /dev/sda -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca
+# /dev/sdb -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca
 
 # variant2
-# DEVICESCAN -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca   
+# DEVICESCAN -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03) -m vnaskov@gurulink.ca
 
 # variant3
 # DEVICESCAN -H -f -l error -l selftest -t -I 1 -I 194 -I 195 -s (S/../.././02|L/../../6/03)
@@ -19,4 +19,13 @@
 
 # see man smartd.conf for more details
 
+# Most recent:
+# /etc/smartd.conf
+# /dev/sda -d ata -H -f -l error -l selftest -t -I 1 -I 194 -I 190 -I 195 -s (S/../.././02|L/../../6/03) -m root -M exec /usr/share/smartmontools/smartd-runner
+# or, for newer OS-es better use -a for all default directives
+# /dev/sda -d ata -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././02|L/../../6/03) -m root -M exec /usr/share/smartmontools/smartd-runner
+#
+# For desktop/laptop machines:
+# cp /root/smartd-error-notify-all.sh /etc/smartmontools/run.d/90custom
+#
 

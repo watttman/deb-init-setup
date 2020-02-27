@@ -4,5 +4,14 @@ apt-get install ethtool apt-show-versions apt-file htop wget iptables-persistent
 # install sqlite3 client
 apt-get install sqlite3
 
-# install zutils, unzip, etc 
+# install zutils, unzip, etc
 apt-get install unzip zip zutils
+
+# this package is not needed for non-laptops
+apt purge laptop-detect # (if not laptop?)
+
+# disk utilities for GPT etc
+apt install gdisk parted
+
+# install listbugs (needed for sid)
+apt install apt-listbugs

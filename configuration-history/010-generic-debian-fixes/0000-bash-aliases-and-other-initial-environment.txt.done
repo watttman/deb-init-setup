@@ -1,11 +1,11 @@
-# Fix /root/.bashrc 
+# Fix /root/.bashrc
 ###
 #
 # Enable  colorizing, safety and convenience aliases
 # Also add alias for dist-upgrade in /root/.bashrc
 # alias d-u='apt-get update && apt-get dist-upgrade -y -d && (echo "Updating apt-show-versions ..."; apt-show-versions -i; ) && ( [[ "`dpkg --get-selections | grep hold`X" != "X" ]] && echo -e "\nYou have holded packages!!!:\n\n----------------\n`dpkg --get-selections | grep hold`\n----------------"; ) '
 #
-# Also enable autocompletion for root: 
+# Also enable autocompletion for root:
 # Either uncomment in /etc/bash.bashrc (this will enable it system-wide), or add to /root/.bashrc copying from non-root's /home/user/.bashrc
 #
 ###
@@ -23,12 +23,27 @@
 #
 
 
-# Remove debian banner in SSH which discloses OS and exact package version
-#
-# Add the line
-# DebianBanner no
-# in /etc/sshd_config
-echo "DebianBanner no" >>/etc/sshd_config
+# SSH: fix sshd_config modifications (when package config gets updates these will be sustained without asking)
+# these overwrite default settings - apply as needed
+# mkdir /etc/ssh/sshd_config.d/
+###
+cat <<EOF > /etc/ssh/sshd_config.d/10-modify.conf
+#change port
+Port 112
+
+# allow root
+PermitRootLogin yes
+# only one passw try, advantageous for iptables protection to require new connection for each attempt
+MaxAuthTries 1
+
+X11Forwarding no
+
+# disable banner to reveal less information for ssh login
+DebianBanner no
+EOF
+
+# End SSH: fix sshd_config modifications
+
 
 
 # Fix resolution in console tty + detailed log messages on start -  add to /etc/default/grub:
@@ -36,9 +51,9 @@ echo "DebianBanner no" >>/etc/sshd_config
 #
 # GRUB_GFXMODE=1024x768
 # GRUB_GFXPAYLOAD_LINUX=1024x768
-# 
+#
 # from GRUB_CMDLINE_LINUX_DEFAULT remove 'quiet', add 'nomodeset' option (so console is not reset after grub and GRUB_GFXPAYLOAD_LINUX comes into effect
-# 
+#
 #
 ###
 # then run update-grub

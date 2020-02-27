@@ -21,7 +21,7 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 #[Service]
 #TTYVTDisallocate=no
 
-#    One reader claims that there must not be an empty line at the end of this file -- and that if an empty line is present, systemd will ignore the file entirely. I can find no evidence that this is true, but I suppose it's possible there are some weird bugs in specific instances of systemd in the wild. 
+#    One reader claims that there must not be an empty line at the end of this file -- and that if an empty line is present, systemd will ignore the file entirely. I can find no evidence that this is true, but I suppose it's possible there are some weird bugs in specific instances of systemd in the wild.
 # As far as I can tell by testing, all of the various getty units that systemd spawns inherit this same "unit file". That is, getty@tty1.service and getty@tty2.service and so on all inherit the configuration called getty@.service. I don't know how or why that happens. It just does. And it's a good thing, too, because otherwise you'd have to create a whole directory + file for every getty. Obviously that would be a horrible thing.
 # If you followed some other document that said to create /etc/systemd/system/getty@tty1.service.d/ then it will only affect the getty@tty1.service unit (i.e. the getty running on /dev/tty1) and not the others. If you only wanted to avoid clearing the first console and let the others clear themselves after every login session, you could do it that way.
 
@@ -42,7 +42,7 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 # Re-read the file(s)
 # Now, you have to tell systemd to re-read the files. This step is missing in almost every other document I found.
 # systemctl daemon-reload
-# Of course, rebooting will also work. That's what I ended up doing the first time. 
+# Of course, rebooting will also work. That's what I ended up doing the first time.
 
 
 
@@ -55,10 +55,10 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 
 # figure out what is the mac address of the current interface emp03v07systemdisfuckinhtupid7862e8716
 # create a file /etc/systemd/network/80-eth0.link  with the following content:
-#[Match]                                                                                                                                                                                               
-#MACAddress=08:00:27:bc:09:9f                                                                                                                                                                          
-#[Link]                                                                                                                                                                                                
-#Name=eth0    
+#[Match]
+#MACAddress=08:00:27:bc:09:9f
+#[Link]
+#Name=eth0
 #
 # Important!: fix /etc/network/interfaces after the new interface name!! (or you can't login remotely after reboot)
 # update-initramfs -u && reboot
@@ -75,14 +75,16 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 #
 #
 
+# NOTE: after closer look, disabling systemd apt scripts looks not necessary unless unattended-upgrades is installed ...
+
 systemctl stop apt-daily.timer
 systemctl disable apt-daily.timer
 systemctl mask apt-daily.service
-    
+
 systemctl stop apt-daily-upgrade.timer
 systemctl disable apt-daily-upgrade.timer
 systemctl mask apt-daily-upgrade.service
-    
+
 systemctl daemon-reload
 
 

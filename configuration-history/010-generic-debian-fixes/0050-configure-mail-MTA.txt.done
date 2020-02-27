@@ -1,8 +1,8 @@
 #
-# 
+#
 # NOTE!!: If ipv6 is disabled:
 # add the line
-# disable_ipv6='true' 
+# disable_ipv6='true'
 # to /etc/exim4/update-exim4.conf.conf file
 #
 # Then
@@ -11,7 +11,7 @@ dpkg-reconfigure exim4-config
 #
 
 
-# To allow sending external mail, dpkg-reconfigure exim4-config 
+# To allow sending external mail, dpkg-reconfigure exim4-config
 # (as internet server @ 1st option, next carefully not to accept anything from outside)
 # see more https://www.debian.org/releases/stable/i386/ch08s05.html.en
 
@@ -32,3 +32,14 @@ dpkg-reconfigure exim4-config
 # check at recepient too
 
 
+# exim4
+add all hosts as local domains, i.e. voip; voip.inss.ca; inss.ca
+# exim4
+# add IGNORE_SMTP_LINE_LENGTH_LIMIT=1 to /etc/exim4/exim4.conf.localmacros to avoid rejecting to send logwatch messages ("T=remote_smtp: message is too big (transport limit = 1)")
+# for details look https://stackoverflow.com/questions/54972465/exim-v4-91-cant-enable-ignore-smtp-line-length-limit-1-macro-to-allow-long-li
+# systemctl restart exim4
+
+
+#/etc/hosts Note 127.0.1.1 should have first fully qualified fqdn name (if any) then the short hostname; important for exim4 as well
+127.0.0.1       localhost
+127.0.1.1       voip.inss.ca voip

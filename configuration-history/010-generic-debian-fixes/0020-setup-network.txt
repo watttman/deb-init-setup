@@ -44,3 +44,9 @@
 
 # For general information, same link:
 # https://wiki.debian.org/NetworkConfiguration
+
+
+
+#/etc/hosts Note 127.0.1.1 should have first fully qualified fqdn name (if any) then the short hostname; important for exim4 as well
+127.0.0.1       localhost
+127.0.1.1       voip.inss.ca voip

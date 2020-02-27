@@ -1,0 +1,3 @@
+# apply by using files in etc/sysctl.d directory
+# they are generally self-documented
+
