@@ -33,8 +33,9 @@ Port 112
 
 # allow root
 PermitRootLogin yes
-# only one passw try, advantageous for iptables protection to require new connection for each attempt
-MaxAuthTries 1
+# only two passw try, advantageous for iptables protection to require new connection for each attempt
+# we need to enable two because if there is a key installed at client in ~/.ssh/ it will be tried first and will get "too many failures" without even asking for password!
+MaxAuthTries 2
 
 X11Forwarding no
 
