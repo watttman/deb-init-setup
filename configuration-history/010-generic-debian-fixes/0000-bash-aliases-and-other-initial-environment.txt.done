@@ -23,7 +23,7 @@
 #
 
 
-# SSH: fix sshd_config modifications (when package config gets updates these will be sustained without asking)
+# SSH SERVER: fix sshd_config modifications (when package config gets updates these will be sustained without asking)
 # these overwrite default settings - apply as needed
 # mkdir /etc/ssh/sshd_config.d/
 ###
@@ -43,7 +43,27 @@ X11Forwarding no
 DebianBanner no
 EOF
 
-# End SSH: fix sshd_config modifications
+# End SSH SERVER: fix sshd_config modifications
+
+
+
+
+# SSH CLIENT: fix ssh_config client modifications 
+# these overwrite client default settings - apply as needed to be able to connect to legacy hosts
+# mkdir /etc/ssh/ssh_config.d/
+###
+cat <<EOF > /etc/ssh/ssh_config.d/10-host-specific.conf
+# Legacy changes to be able to connect some old hosts, i.e. voip.gurulink.ca
+
+# add legacy diffie-hellman-group1-sha1 key exchange method for voip.gurulink.ca
+Host voip.gurulink.ca
+    KexAlgorithms +diffie-hellman-group1-sha1
+
+EOF
+# End SSH CLIENT: fix ssh_config client modifications
+
+
+
 
 
 
