@@ -1,0 +1,386 @@
+# FREEPBX AND ASTERISK INSTALL
+
+# To test below path, can first install Debian testing on test VM (EFI turned on) (for Virtualbox the "live CD" in settings must be unticked, or it fails to install properly)
+# Then upgrade to sid
+# Initial debian install assumed with SSH server, Web server and Standard system utilities
+
+
+### IMPORTANT! Utilize & apply the general Debian configuration-history install guides; as appropriate
+### Only tightly-related FreePBX/asterisk install and fixes described here
+
+
+# REFERENCE: based on asterisk & freepbx install instructions as per https://wiki.freepbx.org/display/FOP/Installing+FreePBX+15+on+Debian+9.6#InstallingFreePBX15onDebian9.6-MariaDBWarning!
+
+# TODO INSTALL: iptables protection script config for asteerisk /root/iptables; configure iptables accordingly (see configuration-history to enable classic iptables)
+
+# TODO INSTALL: aka fail2ban bash scripts (which themselves use iptables) in
+# /usr/local/sbin/asterisk_block_slow_reg_probes.sh
+# /usr/local/sbin/ssh_block_invalid_user_probes.sh
+
+# TODO INSTALL: standard files for modules in /etc/modprobe.d/ (i.e. xt_recent enhanced config)
+
+# FOR ABOVE TODOS: see the accompanying directories
+
+
+
+
+
+##################################
+# --------------------
+# --------------------
+# Asterisk install
+# --------------------
+# --------------------
+##################################
+
+# tested on debian 11 bullseye/sid
+
+apt install asterisk
+
+apt install speex asterisk-mp3 asterisk-doc 
+# dont install asterisk-dahdi ! it is currently likely buggy in sid, and we dont need it anyway
+# apt install asterisk-ooh323 # dont do this, opens port 1720 for signalling; this is some H323 protocol (video?)
+
+# install dependencies needed:
+apt-get install build-essential debhelper libicu-dev pkgconf # these are needed for User Control Panel module
+apt install mariadb-server mariadb-client bison flex
+
+### !!! We MUST STICK TO PHP7.3 which is the last tested version with FREEPBX ! (at the time of last test FREEPBX crashes with php 7.4! So it must be explicitly tested!!!)
+apt install php7.3 php7.3-curl php7.3-cli php7.3-mysql php7.3-gd php7.3-mbstring php7.3-intl php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-xml libapache2-mod-php7.3
+
+# Yes, RUN SECOND TIME! So these are marked as manually installed, and are not proposed for autoremove
+# We do NOT want php7.3 to be deleted to break compatibility, as later PHP versions become available
+apt install php7.3 php7.3-curl php7.3-cli php7.3-mysql php7.3-gd php7.3-mbstring php7.3-intl php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-xml libapache2-mod-php7.3
+
+apt install php-pear
+apt install mpg123 sqlite3 uuid libtool-bin unixodbc dosfstools
+apt install iftop
+
+
+
+# install npm & nodejs
+# needs to be from online
+
+# add the extra nodejs repo;
+# note that with nodejs version 12, ucp module is not working - does not compile? (but 11 is considered legacy? (watch out for this, v 12 may become fixed/compatible at later stage)
+curl -sL https://deb.nodesource.com/setup_11.x | bash -
+apt install nodejs
+
+pear install Console_Getopt # May not be needed anymore? May try without it. See FREEPBX Framework module, changelog entry 15.0.2.1: Remove need for Pear getopts
+
+# change mariadb config file nano -w /etc/mysql/mariadb.conf.d/50-server.cnf
+# by adding:
+[mysqld]
+sql_mode=NO_ENGINE_SUBSTITUTION
+# end change mariadb config file
+# then
+service mysql restart
+# and verify by
+mysql -u root
+SELECT @@SQL_MODE, @@GLOBAL.SQL_MODE;
+
+
+chown asterisk. /var/run/asterisk
+chown -R asterisk. /etc/asterisk
+chown -R asterisk. /var/{lib,log,spool}/asterisk
+chown -R asterisk. /usr/lib/asterisk
+rm -rf /var/www/html
+
+sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php/7.3/apache2/php.ini
+cp /etc/apache2/apache2.conf /etc/apache2/apache2.conf_orig
+sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf
+sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+a2enmod rewrite
+service apache2 restart
+
+
+apt install odbc-mariadb
+
+cat <<EOF > /etc/odbcinst.ini
+[MySQL]
+Description = ODBC for MySQL (MariaDB)
+Driver = /usr/lib/x86_64-linux-gnu/odbc/libmaodbc.so
+FileUsage = 1
+EOF
+
+cat <<EOF > /etc/odbc.ini
+[MySQL-asteriskcdrdb]
+Description = MySQL connection to 'asteriskcdrdb' database
+Driver = MySQL
+Server = localhost
+Database = asteriskcdrdb
+Port = 3306
+Socket = /var/run/mysqld/mysqld.sock
+Option = 3
+EOF
+
+
+#
+# Download and install FreePBX
+#
+#
+cd /usr/src
+wget https://mirror.freepbx.org/modules/packages/freepbx/freepbx-15.0-latest.tgz
+tar vxfz freepbx-15.0-latest.tgz
+rm -f freepbx-15.0-latest.tgz
+touch /etc/asterisk/{modules,cdr}.conf
+cd freepbx
+systemctl stop asterisk.service # stop default asterisk service; to be disabled/masked later; will be managed by separate freepbx service
+./start_asterisk start
+
+
+./install -n
+
+# ?Should we do this?? if the package asterisk-config gets updated we risk losing all config???
+asterisk-config-custom help
+# For now do this, we do not want asterisk-config to rewrite files
+echo "asterisk-config hold" | dpkg --set-selections
+
+
+# NOTE!!: FreePBX can't show mailqueue in dashboard-left panel
+# Exim4 fix, create file
+nano -w /etc/exim4/exim4.conf.localmacros
+# and add the single line:
+# queue_list_requires_admin=false
+#
+# Then run
+# update-exim4.conf , or dpkg-reconfigure exim4-config
+# and then
+systemctl restart exim4.service
+
+
+
+
+
+
+#
+# create the systemd boot service
+#
+
+systemctl stop asterisk.service
+systemctl disable asterisk.service
+systemctl mask asterisk.service
+
+# next is one-liner to create freepbx.service file
+cat <<EOF > /etc/systemd/system/freepbx.service
+[Unit]
+Description=FreePBX VoIP Server
+After=mariadb.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/fwconsole start -q
+ExecStop=/usr/sbin/fwconsole stop -q
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+systemctl daemon-reload
+systemctl enable freepbx.service
+systemctl restart freepbx.service
+
+
+
+
+
+
+
+#apache2 disabled by default; start and stop manually as needed
+systemctl disable apache2.service
+
+
+
+# ** Now easily can be obtained letsencrypt certficates via Certificate Manager module! Use it!**
+# * However: This process requires port 80 access to your PBX from outbound1.letsencrypt.org, outbound2.letsencrypt.org, mirror1.freepbx.org and mirror2.freepbx.org. Using System Admin, Port Management, configure either the Admin interface or UCP to respond on port 80.
+# * see https://wiki.freepbx.org/display/FPG/Certificate+Management+User+Guide
+# * https://community.letsencrypt.org/t/ports-80-and-443-open-is-it-safe/109762/7
+# * At the end, maybe do it using cerbot if it is critical; as it will have to open/close port 80 programmatically during the process of renewal
+
+# *********** Switch apache2 default to https with self-signed certificates
+mkdir /root/apache2-certificates
+cd /root/apache2-certificates
+
+openssl req -x509 -newkey rsa:4096 -keyout apache.key -out apache.crt -days 365 -nodes
+
+mkdir /etc/apache2/ssl
+mv /root/apache2-certificates/* /etc/apache2/ssl/.
+
+nano /etc/apache2/sites-available/default-ssl.conf
+
+# Edit this: ServerAdmin webmaster@localhost to this :
+#
+# ServerAdmin email@example.net
+#
+#    Add this right below the ServerAdmin line:
+#
+# ServerName ADD_YOUR_IP_OR_DOMAIN_NAME_HERE
+#
+#    Now, edit these lines with our certificate location:
+#
+# SSLCertificateFile    /etc/apache2/ssl/apache.crt
+# SSLCertificateKeyFile /etc/apache2/ssl/apache.key
+#
+
+a2enmod ssl
+a2ensite default-ssl.conf
+a2dissite 000-default.conf # disable default non-ssl site
+service apache2 restart
+# ********** End switch apache2 to https
+
+
+
+
+
+
+
+# *********************
+# * Switch apache2 https to basic auth
+
+# create /etc/apache2/.htpasswd file and altogether add user maint
+htpasswd -c /etc/apache2/.htpasswd maint
+# check:
+cat /etc/apache2/.htpasswd
+
+# Add the following to default-ssl.conf virtual host file:
+  <Directory "/var/www/html">
+	  # allow .htaccess files to override (we have essential directives in .htaccess files!)
+	  AllowOverride All
+      AuthType Basic
+      AuthName "Restricted Content"
+      AuthUserFile /etc/apache2/.htpasswd
+  </Directory>
+
+# Now replace "Require all granted" directive in all .htaccess files
+# find /var/www/ -type f -iname ".htaccess" -exec sed -i 's/Require all granted/Require valid-user/g' {} \;
+# and check with
+# grep 'Require all granted' -r /var/www/
+# grep 'Require valid-user' -r /var/www/
+
+# NOTE: ABOVE WILL RAISE RED WARNING IN FreePBX GUI complaining .htaccess files have been modified (modules have been tampered).
+# It should be ignored.
+
+# restart apache2 & freepbx
+systemctl restart apache2
+systemctl restart freepbx
+
+# end switch apache2 https to basic auth
+# *********************
+
+
+
+
+
+
+# *******************
+# Change SIP user agent
+
+# in sip_general_custom.conf add this:
+
+# ; change useragent
+# useragent=FPBX
+
+# *******************
+
+
+
+# *******************
+# * FreePBX: Disable sip guests in SIP general settings:
+# * Allow SIP Guests -> NO
+# *******************
+
+
+
+# Asterisk specific:
+# В Asterisk 11 появилось более детальное логирование подключений в logger.conf добавьте строку security_log => security. Так же нужно переписать правила поиска регулярок в fail2ban.
+# https://www.fail2ban.org/wiki/index.php/Asterisk
+
+# SECURITY HARDENING AGAINS FLOOD/SIP/INVITE/ATTACKS:
+#
+# configure firewall as per file
+# do not change the name of BLACKLISTED and SSHBLACKLIST xt_recent names; these are used by shielding scripts to add IPs
+#
+# enable security log in asterisk, via UI or manually as described below
+# echo "security_log => security" >> /etc/asterisk/logger_logfiles_custom.conf
+# in asterisk, run manually: logger reload
+# and also check:
+# chown asterisk:asterisk /var/log/asterisk/security_log
+
+# ensure security_log is logrotated
+# nano -w /etc/logrotate.d/asterisk
+# add security_log
+
+# add the flood blocker script
+# /usr/local/sbin/asterisk_block_slow_reg_probes.sh
+# and configure it (as a pre-start in the freepbx systemd service....)
+#
+# add the ssh bruteforce with invalid users blocker script
+# /usr/local/sbin/ssh_block_invalid_user_probes.sh
+# and configure it (as a pre-start in the freepbx systemd service....)
+#
+# The modified freepbx.service should look like that:
+# (oneshot service type allows multiple execStart; systemd will clear the extra resident processes when stopping the service b/c KillMode by default is set to control-group;
+# they are all running in the same control group; can be seen/listed by systemd-cgls command)
+# .....
+ExecStart=/usr/local/sbin/asterisk_block_slow_reg_probes.sh
+ExecStart=/usr/local/sbin/ssh_block_invalid_user_probes.sh
+ExecStart=/usr/sbin/fwconsole start -q
+ExecStop=/usr/sbin/fwconsole stop -q
+#.....
+#
+# and then
+systemctl daemon-reload
+#
+# now check with these
+systemctl restart freepbx
+systemctl status freepbx
+ps aux | grep probes
+# ... both scripts should be running
+systemctl stop freepbx
+ps aux | grep probes
+# ... both scripts should NOT be running
+
+
+
+# *******************
+# LOG FILES
+#
+# Ensure the logs are rotated properly
+#
+# First, /etc/logrotate.d/asterisk needs to be fixed
+# (for some reason when systemd is installed, old init script /etc/init.d/asterisk does not execute anything after the line . /lib/lsb/init-functions )
+#
+nano -w /etc/logrotate.d/asterisk
+# Replace postrotate directive line '/usr/sbin/invoke-rc.d asterisk logger-reload > /dev/null 2> /dev/null'
+# with
+/usr/sbin/asterisk -rx 'logger reload' > /dev/null 2> /dev/null
+#
+# Next,
+#
+# /etc/logrotate.d/rsyslog and /etc/logrotate.d/asterisk must provide daily logrotate for auth.log and asterisk full and ALSO security_log which we just enabled above !
+# daily rotate is needed for the custom bash fail2ban-like scripts
+# In /etc/logrotate.d/rsyslog especially pay attention to auth.log, it is by default rotated weekly - need to change!
+# for /etc/logrotate.d/asterisk, ensure to add this directive:
+#		su asterisk asterisk
+# to logrotate configuration directives, otherwise logrotate may refuse to rotate because of the permissions of parent /var/log/asterisk directory!
+# Ensure logrotate does not spit errors
+systemctl restart logrotate.service
+systemctl status logrotate.service
+# *******************
+
+
+
+
+# To get all errors for running services using journalctl:
+# journalctl -p 3 -xb
+# where -p 3 means priority err, -x provides extra message information, and -b means since last boot
+# or
+# journalctl -p err -xb
+# which is the same
+
+
+
+
+###########################
+
