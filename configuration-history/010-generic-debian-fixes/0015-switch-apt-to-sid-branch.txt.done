@@ -66,3 +66,10 @@ apt-get install apt-listchanges
 # configure it
 dpkg-reconfigure apt-listchanges
 
+
+#############################################
+# install apt-listbugs
+apt-get install apt-listbugs
+
+
+
