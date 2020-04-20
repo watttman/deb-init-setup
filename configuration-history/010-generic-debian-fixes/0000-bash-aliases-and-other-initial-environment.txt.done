@@ -93,3 +93,16 @@ EOF
 #-----------------------------------------------------------------------
 #
 ###
+
+
+# Configure locale, recent default installs seem to miss this (and sometimes annoying errors are reported i.e. cron)
+###
+#
+# use en_US.UTF-8
+#
+dpkg-reconfigure locales
+#
+#
+#
+#
+#
