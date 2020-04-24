@@ -1,11 +1,13 @@
 
 # As of bullseye, we need this for minimally operational desktop (with systemd):
-apt install kde-plasma-desktop xserver-xorg okular-extra-backends
+apt install kde-plasma-desktop xserver-xorg okular-extra-backends 
+apt install wpagui
 apt install p7zip-full rar unrar zutils
 apt install xfonts-terminus
 apt install mesa-utils
 apt install kate qalculate-gtk kde-spectacle
 apt install ntfs-3g xfsprogs jfsutils dosfstools mtools attr sshfs
+apt install cryptmount
 apt install krdc freerdp2-x11 virt-manager virtinst ebtables
 update-alternatives --set ebtables /usr/sbin/ebtables-legacy
 apt install tangerine-icon-theme tango-icon-theme sddm-theme-breeze sddm-theme-debian-breeze qtcurve
