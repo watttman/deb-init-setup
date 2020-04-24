@@ -1,8 +1,8 @@
 # install base packages (all but pppconfig should be already there)
-apt-get install ppp pppoeconf pppconfig 
+apt install ppp pppoeconf pppconfig 
 
 # install pptp protocol for ms-chap VPN
-pptp-linux
+apt install pptp-linux
 
 # install kde UI 
-apt-get install kppp 
+# apt-get install kppp 

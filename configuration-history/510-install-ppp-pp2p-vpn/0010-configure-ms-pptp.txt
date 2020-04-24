@@ -8,6 +8,17 @@
 # FILE: /etc/ppp/peers/GuruVPN
 # see local file: create file /etc/ppp/peers/GuruVPN
 
+
+# FIX BUG in ppoeconfig to avoid DNS leak when providing custom(manual) DNS server for VPN connection !!!
+#
+# In /etc/ppp/ip-up.d/0dns-up
+# find the line
+# [ -L  "$RESOLVCONF" ] || grep " / " /proc/mounts | grep -q " rw " || exit 0
+# and replace with (remove space after the rw)
+# [ -L  "$RESOLVCONF" ] || grep " / " /proc/mounts | grep -q " rw" || exit 0
+
+
+
 # usage:
 # pon GuruVPN 
 # sleep 3; ifconfig

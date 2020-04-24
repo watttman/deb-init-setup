@@ -1,5 +1,52 @@
+
+# As of bullseye, we need this for minimally operational desktop (with systemd):
+# apt install kde-plasma-desktop xserver-xorg okular-extra-backends
+# apt install p7zip-full rar unrar zutils
+# apt install fonts-terminus
+# apt install mesa-utils
+# apt install kate qalculate-gtk kde-spectacle
+# apt install ntfs-3g xfsprogs jfsutils dosfstools mtools attr sshfs
+# apt install krdc freerdp2-x11 virt-manager virtinst ebtables
+# update-alternatives --set ebtables /usr/sbin/ebtables-legacy
+# apt install tangerine-icon-theme tango-icon-theme sddm-theme-breeze sddm-theme-debian-breeze qtcurve
+# apt install libreoffice
+# apt install mpv firefox
+# apt install powertop # laptops only!
+# apt install gpm
+
+
+
+# Fix systemd shit - restore login on tty1!
+#
+# Override sddm.service:
+# cp /lib/systemd/system/sddm.service /etc/systemd/system/
+#
+# Now change /etc/systemd/system/sddm.service (remove conflicts with tty1)
+# --------------
+# ....
+## Change this if you want to start sddm in a different tty
+## Conflicts=getty@tty1.service getty@tty7.service
+## We want tty1 !
+#Conflicts=getty@tty7.service
+#After=getty@tty1.service getty@tty7.service
+#.....
+# --------------
+# 
+
+
+
+
+#############################################################
+#
+# ALL BELOW IS generally OBSOLETE! Use it only for reference !!!
+#
+#
+
 # in case of nosystemd system:
 apt-get install kde-plasma-desktop kdm xserver-xorg gksu desktop-base dmz-cursor-theme polkit-kde-1 alsa-base alsa-utils kmix knemo khelpcenter4 kmenuedit kde-config-touchpad okular-extra-backends kde-config-screenlocker
+
+
+
 
 
 ####

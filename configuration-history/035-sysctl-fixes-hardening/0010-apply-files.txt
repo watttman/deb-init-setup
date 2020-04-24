@@ -1,3 +1,6 @@
 # apply by using files in etc/sysctl.d directory
 # they are generally self-documented
 
+# similar command may be handy; after navigating to the local sysctl.d directory
+# to copy only exta files starting with 23456
+# scp [23456]* root@192.168.167.136:/etc/sysctl.d/
