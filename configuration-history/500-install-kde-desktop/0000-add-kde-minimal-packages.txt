@@ -1,21 +1,31 @@
 
 # As of bullseye, we need this for minimally operational desktop (with systemd):
-# apt install kde-plasma-desktop xserver-xorg okular-extra-backends
-# apt install p7zip-full rar unrar zutils
-# apt install fonts-terminus
-# apt install mesa-utils
-# apt install kate qalculate-gtk kde-spectacle
-# apt install ntfs-3g xfsprogs jfsutils dosfstools mtools attr sshfs
-# apt install krdc freerdp2-x11 virt-manager virtinst ebtables
-# update-alternatives --set ebtables /usr/sbin/ebtables-legacy
-# apt install tangerine-icon-theme tango-icon-theme sddm-theme-breeze sddm-theme-debian-breeze qtcurve
-# apt install libreoffice
-# apt install mpv firefox
+apt install kde-plasma-desktop xserver-xorg okular-extra-backends
+apt install p7zip-full rar unrar zutils
+apt install xfonts-terminus
+apt install mesa-utils
+apt install kate qalculate-gtk kde-spectacle
+apt install ntfs-3g xfsprogs jfsutils dosfstools mtools attr sshfs
+apt install krdc freerdp2-x11 virt-manager virtinst ebtables
+update-alternatives --set ebtables /usr/sbin/ebtables-legacy
+apt install tangerine-icon-theme tango-icon-theme sddm-theme-breeze sddm-theme-debian-breeze qtcurve
+apt install libreoffice
+apt install mpv firefox
 # apt install powertop # laptops only!
-# apt install gpm
+apt install gpm
+
+##################
+# Remove extra crap which may got installed
+#
+apt purge discover plasma-discover unattended-upgrades mc
+apt autoremove --purge 
+#
+#
+#
 
 
 
+####################
 # Fix systemd shit - restore login on tty1!
 #
 # Override sddm.service:
@@ -32,6 +42,80 @@
 #.....
 # --------------
 # 
+
+######################
+# Fix font rendering for some displays (works good with tahoma font)
+# in /etc/environment add the following
+
+# Subpixel hinting mode can be chosen by setting the right TrueType interpreter
+# version. The available settings are:
+#
+#     truetype:interpreter-version=35  # Classic mode (default in 2.6)
+#     truetype:interpreter-version=38  # Infinality mode
+#     truetype:interpreter-version=40  # Minimal mode (default in 2.7)
+#
+# There are more properties that can be set, separated by whitespace. Please
+# refer to the FreeType documentation for details.
+
+# Uncomment and configure below
+export FREETYPE_PROPERTIES="truetype:interpreter-version=35"
+
+
+
+#####################
+#
+# Download MS fonts and tahoma
+#
+# MS fonts
+apt install msttcorefonts
+#
+# Tahoma
+cd /tmp
+wget https://archive.org/download/ftp.microsoft.com/ftp.microsoft.com.zip/ftp.microsoft.com/Softlib/MSLFILES/TAHOMA32.EXE
+# apt install cabextract || echo "You need 'contrib' in /etc/apt/sources.list"
+cabextract TAHOMA32.EXE
+mv Tahoma*.TTF /usr/share/fonts/truetype/msttcorefonts/
+fc-cache -f -v
+
+
+#####################
+#
+# Add user to libvirt group so virt-manager does not ask for root password
+#
+usermod -a -G libvirt manul
+
+
+
+#####################
+#
+# Reduce wear for SSD's
+#
+# see https://easylinuxtipsproject.blogspot.com/p/ssd.html
+#
+# Main points:
+#
+# 1) noatime in /etc/fstab
+# 2) systemctl enable fstrim.timer
+# 3) Firefox about:config
+#	browser.cache.disk.enable  (set to true)
+#	browser.cache.memory.enable (should be true)
+#	browser.cache.memory.capacity (set to 204800 which means 200 MB)
+#	check above with about:cache
+#	browser.sessionstore.interval (default is 15000 which means 15 seconds; add three zeros)
+# 4) Fix the disk scheduler to 'none'
+#	cat /sys/block/sda/queue/scheduler
+#	if not 'none', add to /etc/default/grub GRUB_CMDLINE_LINUX_DEFAULT="elevator=noop ...."
+#	update-grub
+#
+# 5) Disable hibernate and hybrid-sleep
+#	systemctl mask hibernate.target hybrid-sleep.target
+
+
+
+
+
+
+
 
 
 
