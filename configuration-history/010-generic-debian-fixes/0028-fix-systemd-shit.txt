@@ -25,6 +25,10 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 # As far as I can tell by testing, all of the various getty units that systemd spawns inherit this same "unit file". That is, getty@tty1.service and getty@tty2.service and so on all inherit the configuration called getty@.service. I don't know how or why that happens. It just does. And it's a good thing, too, because otherwise you'd have to create a whole directory + file for every getty. Obviously that would be a horrible thing.
 # If you followed some other document that said to create /etc/systemd/system/getty@tty1.service.d/ then it will only affect the getty@tty1.service unit (i.e. the getty running on /dev/tty1) and not the others. If you only wanted to avoid clearing the first console and let the others clear themselves after every login session, you could do it that way.
 
+# Re-read the file(s)
+# Now, you have to tell systemd to re-read the files. This step is missing in almost every other document I found.
+# systemctl daemon-reload
+
 # After you've created your override, if you run systemctl cat getty@tty1.service again, you'll see your additions:
 
 #$ systemctl cat getty@tty1.service
@@ -60,10 +64,19 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 #[Link]
 #Name=eth0
 #
+#
+# Do the same for all crippled inteface names - i.e. wlan0, etc
 # Important!: fix /etc/network/interfaces after the new interface name!! (or you can't login remotely after reboot)
 # update-initramfs -u && reboot
 
 
+
+#
+# Remove buggy systemd-timesyncd in favor of good old ntp
+apt install ntp
+# above will remove systemd-timesyncd; however must run the next one to purge all traces:
+apt purge systemd-timesyncd
+#
 
 
 

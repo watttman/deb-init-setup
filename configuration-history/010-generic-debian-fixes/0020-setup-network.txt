@@ -1,3 +1,57 @@
+####
+#
+# Typical install on wi-fi only devices (i.e. laptops with no LAN port,
+#	or when the primary iface selected during install is wifi)
+#
+####
+# 
+# Typically after install you have wpasupplicant installed
+#
+# 1) For systemd: ensure interfaces have normal names (see fix systemd shit instruction)
+#
+# 2) Create file /etc/wpa_supplicant/wpa_supplicant.conf  with the following content:
+#
+# ----------
+# ctrl_interface=DIR=/run/wpa_supplicant GROUP=netdev
+# update_config=1
+# p2p_disabled=1
+#
+# network={
+#        ssid="[Network Name]"
+#        psk="[Network Password]"
+#        priority=100
+#}
+# -----------
+#
+# 3) Add the wlan0 to /etc/network/interfaces :
+#
+# -----------
+# allow-hotplug wlan0
+# iface wlan0 inet dhcp
+#        #wpa-ssid MyNetwork
+#        #wpa-psk MyPassword
+#        wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+#        # we need next line otherwise the ssh does not work in 5GHz !!!
+#        post-up /usr/sbin/iwconfig wlan0 power off
+#
+# -----------
+#
+# update-initramfs -u && reboot
+#
+# 4) Check if there is wifi internet after the reboot!
+# 5) If there is inet after reboot, there are usually two processes in ps aux | grep wpa ; one of these is bogus (systemd wpasupplicant service is redundant)
+# 6) systemctl disable wpa_supplicant.service
+# 7) update-initramfs -u && reboot
+# 8) Now you should have wifi inet without the bogus systemd wpa_supplicant process! (as it is based on /etc/network/interfaces config) 
+#
+
+
+
+
+
+
+
+
 # checkup /etc/hosts , add if something is needed
 # typical proper config:
 
