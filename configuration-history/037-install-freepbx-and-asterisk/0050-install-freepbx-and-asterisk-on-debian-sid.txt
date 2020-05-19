@@ -52,6 +52,9 @@ apt install php7.3 php7.3-curl php7.3-cli php7.3-mysql php7.3-gd php7.3-mbstring
 # We do NOT want php7.3 to be deleted to break compatibility, as later PHP versions become available
 apt install php7.3 php7.3-curl php7.3-cli php7.3-mysql php7.3-gd php7.3-mbstring php7.3-intl php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-xml libapache2-mod-php7.3
 
+# Yes, mark all these packages on hold so they do not get removed via dist-upgrade!
+apt-mark hold php7.3 php7.3-curl php7.3-cli php7.3-mysql php7.3-gd php7.3-mbstring php7.3-intl php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-xml libapache2-mod-php7.3
+
 apt install php-pear
 apt install mpg123 sqlite3 uuid libtool-bin unixodbc dosfstools
 apt install iftop
