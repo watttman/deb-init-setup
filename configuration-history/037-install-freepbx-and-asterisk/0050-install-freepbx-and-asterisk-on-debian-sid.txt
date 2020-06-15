@@ -277,12 +277,48 @@ systemctl restart freepbx
 
 
 # *******************
-# Change SIP user agent
+# Change SIP user agent and tune other low-level SIP settings
+
+# Note the change of registertimeout (this is how frequently Asterisk will reattempt to register if not successfully registered)
+# And also the defaultexpiry and qualifyfreq params
+# Tuning these is important to avoid being "locked" in "request sent" without being able to actually register (some over protective SIP providers may block per IP due to too frequent registration attempts!)
 
 # in sip_general_custom.conf add this:
 
-# ; change useragent
-# useragent=FPBX
+; change useragent
+useragent=FPBX
+
+; Tune registration and re-registration attempts
+
+;Outbound reg. timeout, "Specifies how often Asterisk should attempt to re-register to other devices", defaults to 20 secs
+registertimeout=61
+
+;Outbound reg. attempts, "Specifies how many times Asterisk will attempt its outbound registrations before giving up. This setting defaults to 0, which means that Asterisk will retry indefinitely"
+;registerattempts=0
+
+;Reg. default duration, defaults to 120 secs
+; This sets the default SIP registration expiration time, in seconds, for incoming and outgoing registrations. A client will normally 
+; define this value when it initially registers, so the default value you set here will be used only if the client does not specify 
+; a timeout when it registers. If you are registering to another user agent server (UAS), this is the registration timeout 
+; that it will send to the far end:
+defaultexpiry=300
+
+;Reg. max duration, defaults to 3600
+; This sets the maximum amount of time, in seconds, until a peer’s registration expires
+;maxexpiry=3600
+
+;Reg. min duration, defaults to 60 secs
+; This sets the minimum amount of time, in seconds, allowed for a registration or subscription
+; minexpiry=60
+
+
+# In SIP settings for the classic SIP trunks, apart of normal settings add this (via GUI):
+# qualifyfreq (by default 60s) must be just below the UDP timeout setting of the router, if the PBX is behind router; and the larger the better.
+# In the case below, router has UDP timeout set to 120 sec, so we put 115 sec.
+
+qualifyfreq=115
+qualify=yes
+
 
 # *******************
 
