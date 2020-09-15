@@ -49,7 +49,9 @@ echo "SYSTEMD_PAGER=''" >>/etc/environment
 # Of course, rebooting will also work. That's what I ended up doing the first time.
 
 
-
+#
+# To restore login on tty1 under kde/ssdm, see ../500-install-kde-desktop/0000-add-kde-minimal-packages.txt file
+#
 
 
 
