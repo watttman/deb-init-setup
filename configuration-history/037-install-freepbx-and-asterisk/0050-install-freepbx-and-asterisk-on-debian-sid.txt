@@ -340,11 +340,12 @@ qualify=yes
 # configure firewall as per file
 # do not change the name of BLACKLISTED and SSHBLACKLIST xt_recent names; these are used by shielding scripts to add IPs
 #
-# enable security log in asterisk, via UI or manually as described below
+# enable security log in asterisk, via UI!
+# ...or manually as described below
 # echo "security_log => security" >> /etc/asterisk/logger_logfiles_custom.conf
 # in asterisk, run manually: logger reload
 # and also check:
-# chown asterisk:asterisk /var/log/asterisk/security_log
+# chown asterisk:asterisk /var/log/asterisk/security
 
 # ensure security_log is logrotated
 # nano -w /etc/logrotate.d/asterisk
