@@ -23,16 +23,27 @@
 #}
 # -----------
 #
+
+#
 # 3) Add the wlan0 to /etc/network/interfaces :
 #
+# # ROAMING CONFIG 
 # -----------
 # allow-hotplug wlan0
-# iface wlan0 inet dhcp
-#        #wpa-ssid MyNetwork
-#        #wpa-psk MyPassword
-#        wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-#        # we need next line otherwise the ssh does not work in 5GHz !!!
+# iface wlan0 inet manual
+#        wpa-roam /etc/wpa_supplicant/wpa_supplicant.conf
+#        # we may need next line otherwise the ssh does not work in 5GHz !!! Depends on the chip
 #        post-up /usr/sbin/iwconfig wlan0 power off
+#
+#
+# # next line goes together with iface wlan *MANUAL* (instead of dhcp) and wpa-roam (instead of wpa-conf) - and is a must in this case!!
+# # iface names take id_str values from /etc/wpa_supplicant/wpa_supplicant.conf  (if they are set there, there should be a separate "iface MyIfaceIdStr inet dhcp" for each of them)
+# iface default inet dhcp
+#
+# # OTHERS
+# # For static or non-roaming wlan config see:
+# # zcat /usr/share/doc/wpa_supplicant/README.modes.gz
+#
 #
 # -----------
 #
@@ -44,8 +55,11 @@
 # 7) update-initramfs -u && reboot
 # 8) Now you should have wifi inet without the bogus systemd wpa_supplicant process! (as it is based on /etc/network/interfaces config) 
 #
-
-
+#
+# Quick manual temporary connect to the configured network (doesn't require ifupdown); -B option start in background
+#
+# wpa_supplicant -B -D wext -i <interface> -c /etc/wpa_supplicant/wpa_supplicant.conf
+#
 
 
 
