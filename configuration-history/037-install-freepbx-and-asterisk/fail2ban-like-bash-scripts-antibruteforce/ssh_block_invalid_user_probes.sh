@@ -38,7 +38,7 @@ BSNAME=$(basename -- "${0}")
 IP4TOBLOCKTMPFILE="/tmp/${BSNAME}.temp.txt"
 LOGFILE="/var/log/${BSNAME}.log"
 
-THISSERVERIP=`${DIG} @resolver1.opendns.com ANY myip.opendns.com +short`
+THISSERVERIP=`${DIG} +short myip.opendns.com @resolver1.opendns.com`
 
 
 blacklist () {
@@ -123,7 +123,7 @@ processIP () {
 
 analyzeSecureLog () {
 
-        THISSERVERIP=`${DIG} -4 @resolver1.opendns.com ANY myip.opendns.com +short`
+        THISSERVERIP=`${DIG} +short myip.opendns.com @resolver1.opendns.com`
 
 	echo `date`
         echo "This server IP is ${THISSERVERIP}, will be excluded from blocking"

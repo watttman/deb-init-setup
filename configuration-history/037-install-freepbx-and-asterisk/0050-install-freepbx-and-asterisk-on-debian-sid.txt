@@ -168,7 +168,7 @@ systemctl mask asterisk.service
 cat <<EOF > /etc/systemd/system/freepbx.service
 [Unit]
 Description=FreePBX VoIP Server
-After=mariadb.service
+After=mariadb.service network.target
 
 [Service]
 Type=oneshot
@@ -363,6 +363,7 @@ qualify=yes
 # (oneshot service type allows multiple execStart; systemd will clear the extra resident processes when stopping the service b/c KillMode by default is set to control-group;
 # they are all running in the same control group; can be seen/listed by systemd-cgls command)
 # .....
+ExecStartPre=/bin/sleep 12
 ExecStart=/usr/local/sbin/asterisk_block_slow_reg_probes.sh
 ExecStart=/usr/local/sbin/ssh_block_invalid_user_probes.sh
 ExecStart=/usr/sbin/fwconsole start -q

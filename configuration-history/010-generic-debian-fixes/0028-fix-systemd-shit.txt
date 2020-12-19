@@ -1,7 +1,9 @@
 #
 # disable the ridiculous systemd pager
 #
-echo "SYSTEMD_PAGER=''" >>/etc/environment
+# echo "SYSTEMD_PAGER=''" >>/etc/environment
+# above seems to work, but still raise stupid error in daemon.log for invalid syntax; use instead
+echo "SYSTEMD_PAGER='cat'" >>/etc/environment
 
 
 #
@@ -90,7 +92,7 @@ apt purge systemd-timesyncd
 #
 #
 
-# NOTE: after closer look, disabling systemd apt scripts looks not necessary unless unattended-upgrades is installed ...
+# NOTE: after closer look, disabling systemd apt scripts looks not necessary, unless unattended-upgrades is installed as well (which usually is not)...
 
 systemctl stop apt-daily.timer
 systemctl disable apt-daily.timer
