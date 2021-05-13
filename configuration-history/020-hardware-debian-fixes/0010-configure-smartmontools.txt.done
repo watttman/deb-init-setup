@@ -29,3 +29,12 @@
 # cp /root/smartd-error-notify-all.sh /etc/smartmontools/run.d/90custom
 #
 
+
+# For Dell 740 poweredge server, behind PERC H370 as non-raid
+/dev/sda -d sat -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././01|L/../../2/22) -m root -M exec /usr/share/smartmontools/smartd-runner
+/dev/sdb -d sat -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././03|L/../../3/22) -m root -M exec /usr/share/smartmontools/smartd-runner
+/dev/sdc -d sat -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././02|L/../../4/22) -m root -M exec /usr/share/smartmontools/smartd-runner
+/dev/sdd -d sat -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././04|L/../../5/22) -m root -M exec /usr/share/smartmontools/smartd-runner
+/dev/sde -d sat -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././05|L/../../6/22) -m root -M exec /usr/share/smartmontools/smartd-runner
+/dev/sdf -d sat -a -I 1 -I 194 -I 190 -I 195 -s (S/../.././07|L/../../7/22) -m root -M exec /usr/share/smartmontools/smartd-runner
+# times for short and long tests, must be reasonably shuffled, considering the raids as well
