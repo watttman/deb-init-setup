@@ -105,3 +105,21 @@ systemctl mask apt-daily-upgrade.service
 systemctl daemon-reload
 
 
+#
+# Ensure we enable rc.local with systemd
+#
+# read this
+# systemctl cat rc-local
+# man systemd-rc-local-generator
+#
+# Create rc.local file (as root)
+# printf '%s\n' '#!/bin/bash' 'exit 0' | tee -a /etc/rc.local
+# chmod +x /etc/rc.local
+#
+# systemctl enable rc-local
+# systemctl start rc-local
+#
+# You can test it afterwards by a reboot (it would start async after network-online.target)
+#
+#
+#

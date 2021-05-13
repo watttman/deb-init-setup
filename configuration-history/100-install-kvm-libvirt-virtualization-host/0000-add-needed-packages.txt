@@ -2,11 +2,31 @@
 egrep '(vmx|svm)' --color=always /proc/cpuinfo
 
 # Install kvm and virtinst
-apt-get update; apt-get install kvm qemu-kvm libvirt-bin virtinst bridge-utils qemu-utils ebtables dnsmasq
+# apt-get update; 
+# When installing on a server, you can add the --no-install-recommends apt option, to prevent the installation of extraneous graphical packages: 
+# apt install --no-install-recommends qemu-system libvirt-clients libvirt-daemon-system
+# apt install qemu-utils
+# apt install --no-install-recommends  virtinst 
+# apt install bridge-utils libosinfo-bin
+# apt install ebtables dnsmasq-base # this is a must, libvirtd daemon will not start without dnsmasq
+# update-alternatives --set ebtables /usr/sbin/ebtables-legacy
+#
+# ?? apt install libguestfs-tools ?is this needed? Too much graphical UI stuff...
+# ?? missing virt-top in bullseye??? Closed, will be missing from bullseye, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=987481
 
-# Afterwards we must add the user as which we're currently logged in (root) to the groups libvirt and kvm:
+# User-specific and system-wide VMs: below concerns mainly normal users, and not root
+#
+# In order to manage virtual machines as regular user, that user needs to be added to the libvirt group:
 # adduser `id -un` libvirt
-# adduser `id -un` kvm
+# ?? not needed anymore?? adduser `id -un` kvm
+#
+# By default, if virsh is run as a normal user it will connect to libvirt using qemu:///session URI string. This URI allows virsh to manage only the set of VMs belonging to this particular user. To manage the system set of VMs (i.e., VMs belonging to root) virsh should be run as root or with qemu:///system URI:
+# $ virsh --connect qemu:///system list --all
+#
+# To avoid having to use the --connect flag on every command, the URI string can be set in the LIBVIRT_DEFAULT_URI environment variable:
+#
+# $ export LIBVIRT_DEFAULT_URI='qemu:///system'
+#
 
 
 # To check if KVM has successfully been installed, run
@@ -21,3 +41,10 @@ virsh -c qemu:///system list
 ### root@server1:~#
 
 
+#
+# Create static network for VM's
+#
+# Using a remote virt-manager, connect and delete default network. 
+# Create new network 192.168.123.0/24 with DHCP disabled. 
+# Ensure it is set to be active at bootup/start.
+#
