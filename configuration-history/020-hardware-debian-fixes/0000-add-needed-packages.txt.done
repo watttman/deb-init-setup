@@ -19,5 +19,17 @@ apt-get install memtest86+
 update-grub
 
 
+# Useful for dell (and other) servers:
+#
+# read apt show ipmitool
+#
+# apt install ipmitool
+#
+# Useful for generic server enclosure sensors, i.e. command 
+# ipmitool sensor list
+# is useful
+#
+
+
 # what else?
 
