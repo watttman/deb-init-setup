@@ -37,7 +37,7 @@
 
 apt install asterisk
 
-apt install speex asterisk-mp3 asterisk-doc 
+apt install speex asterisk-mp3 asterisk-doc
 # dont install asterisk-dahdi ! it is currently likely buggy in sid, and we dont need it anyway
 # apt install asterisk-ooh323 # dont do this, opens port 1720 for signalling; this is some H323 protocol (video?)
 
@@ -281,7 +281,7 @@ systemctl restart freepbx
 
 # Note the change of registertimeout (this is how frequently Asterisk will reattempt to register if not successfully registered)
 # And also the defaultexpiry and qualifyfreq params
-# Tuning these is important to avoid being "locked" in "request sent" without being able to actually register (some over protective SIP providers may block per IP due to too frequent registration attempts!)
+# Tuning these is important to avoid being "locked" in "request sent" without being able to actually register (some over protective SIP providers may block per IP due to too frequent registration/check attempts!)
 
 # in sip_general_custom.conf add this:
 
@@ -291,15 +291,17 @@ useragent=FPBX
 ; Tune registration and re-registration attempts
 
 ;Outbound reg. timeout, "Specifies how often Asterisk should attempt to re-register to other devices", defaults to 20 secs
-registertimeout=61
+;we must increase that so we dont bug the VOIP provider too frequently, to avoid being blocked
+;ideally should be more or less the same as qualifyfreq param for sip trunk settings (which in turn should be a bit less than router's keepalive setting), see below
+registertimeout=117
 
 ;Outbound reg. attempts, "Specifies how many times Asterisk will attempt its outbound registrations before giving up. This setting defaults to 0, which means that Asterisk will retry indefinitely"
 ;registerattempts=0
 
 ;Reg. default duration, defaults to 120 secs
-; This sets the default SIP registration expiration time, in seconds, for incoming and outgoing registrations. A client will normally 
-; define this value when it initially registers, so the default value you set here will be used only if the client does not specify 
-; a timeout when it registers. If you are registering to another user agent server (UAS), this is the registration timeout 
+; This sets the default SIP registration expiration time, in seconds, for incoming and outgoing registrations. A client will normally
+; define this value when it initially registers, so the default value you set here will be used only if the client does not specify
+; a timeout when it registers. If you are registering to another user agent server (UAS), this is the registration timeout
 ; that it will send to the far end:
 defaultexpiry=300
 
@@ -314,6 +316,7 @@ defaultexpiry=300
 
 # In SIP settings for the classic SIP trunks, apart of normal settings add this (via GUI):
 # qualifyfreq (by default 60s) must be just below the UDP timeout setting of the router, if the PBX is behind router; and the larger the better.
+# we must increase that so we dont bug the VOIP provider too frequently, to avoid being blocked
 # In the case below, router has UDP timeout set to 120 sec, so we put 115 sec.
 
 qualifyfreq=115
