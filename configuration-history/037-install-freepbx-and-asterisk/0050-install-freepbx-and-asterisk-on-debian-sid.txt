@@ -58,6 +58,7 @@ apt-mark hold php7.3 php7.3-curl php7.3-cli php7.3-mysql php7.3-gd php7.3-mbstri
 apt install php-pear
 apt install mpg123 sqlite3 uuid libtool-bin unixodbc dosfstools
 apt install iftop
+apt install tcpdump
 
 
 
@@ -321,7 +322,7 @@ defaultexpiry=300
 # In the case below, router has UDP timeout set to 120 sec, so we put 115 sec.
 # if we have issues (request sent stuck) try to check 'cat /proc/net/ip_conntrack | grep udp | grep external-ip-address-of-the-router | local-pbx-ip-address' at the router to verify UDP port mapping for registry is kept at 5060?
 # !there is an opinion we should have this larger than the UDP keepalive to avoid "poisoned" nat mapping; you can try setting this to 300 (and reboot the external dsl modem giving it >defaultexpiry downtime; to verify the trunks come up registered)
-qualifyfreq=300
+qualifyfreq=117
 qualify=yes
 
 
@@ -334,6 +335,7 @@ qualify=yes
 # * Allow SIP Guests -> NO
 # *******************
 
+# Security best practices: https://wiki.freepbx.org/display/FDT/FreePBX+Security+Best+Practices
 
 
 # Asterisk specific:
