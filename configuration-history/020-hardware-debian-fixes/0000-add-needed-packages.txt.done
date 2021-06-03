@@ -30,6 +30,7 @@ update-grub
 # is useful
 #
 
+# apt install iftop iotop
 
 # what else?
 

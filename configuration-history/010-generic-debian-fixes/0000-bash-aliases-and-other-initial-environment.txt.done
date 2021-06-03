@@ -56,6 +56,10 @@ cat <<EOF > /etc/ssh/sshd_config.d/10-modify.conf
 #change port
 Port 112
 
+# You may want to disable listening on ipv6; proper values are: any, inet, inet6
+#AddressFamily any
+AddressFamily inet
+
 # allow root
 PermitRootLogin yes
 # only two passw try, advantageous for iptables protection to require new connection for each attempt
@@ -131,3 +135,52 @@ dpkg-reconfigure locales
 #
 #
 #
+
+
+
+
+#
+# Tune logrotate /etc/logrotate.d/rsyslog 
+#
+# useful for servers... shorter logs for longer time
+# cat /etc/logrotate.d/rsyslog 
+/var/log/syslog
+{
+        rotate 7
+        daily
+        missingok
+        notifempty
+        delaycompress
+        compress
+        postrotate
+                /usr/lib/rsyslog/rsyslog-rotate
+        endscript
+}
+
+/var/log/mail.info
+/var/log/mail.warn
+/var/log/mail.err
+/var/log/mail.log
+/var/log/daemon.log
+/var/log/kern.log
+/var/log/auth.log
+/var/log/user.log
+/var/log/lpr.log
+/var/log/cron.log
+/var/log/debug
+/var/log/messages
+{
+        rotate 16
+        daily
+        missingok
+        notifempty
+        compress
+        delaycompress
+        sharedscripts
+        postrotate
+                /usr/lib/rsyslog/rsyslog-rotate
+        endscript
+}
+
+
+

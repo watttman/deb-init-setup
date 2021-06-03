@@ -15,3 +15,9 @@ apt install gdisk parted
 
 # install listbugs (needed for sid)
 apt install apt-listbugs
+
+# install sshfs, it is useful
+apt install sshfs
+
+# and pv also to measure transfer time/lengths
+apt install pv
