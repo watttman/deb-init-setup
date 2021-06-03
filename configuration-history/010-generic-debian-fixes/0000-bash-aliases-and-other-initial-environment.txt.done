@@ -89,6 +89,26 @@ Host voip.gurulink.ca
     KexAlgorithms +diffie-hellman-group1-sha1
 
 EOF
+
+#
+
+cat <<EOF > /etc/ssh/ssh_config.d/5-keepalive.conf
+# configure this typically on client machines, to avoid timeouts due to inactivity
+# configures ssh to send keepalive messages
+# this keeps connection open and prevents the server from dropping due to inactivity
+# if the server becomes inresponsive, the client will drop the connection
+
+# Sets a timeout interval in seconds after which if no data has been received from the server, ssh will send a message through the encrypted channel to request a response from the server. 
+# For example, set a timeout to 15 seconds.
+ServerAliveInterval 15
+
+# Sets the number of server alive messages which may be sent without receiving any messages back from the server. 
+# If this threshold is reached while server alive messages are being sent, ssh will disconnect from the server, terminating the session. 
+# The server alive messages are sent through the encrypted channel and therefore will not be spoofable.
+ServerAliveCountMax 3
+
+EOF
+
 # End SSH CLIENT: fix ssh_config client modifications
 
 
