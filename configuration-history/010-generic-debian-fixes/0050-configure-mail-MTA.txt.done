@@ -88,6 +88,7 @@ cat /etc/email-addresses
 
 
 # Override SMTP HELO/EHLO host name used for outgoing mail
+# The issue reported as "KHOP_HELO_FCRDNS		Relay HELO differs from its IP's reverse DNS"
 # This SOMETIME works if we want the reverse DNS of the server announced in HELO/EHLO to match sending IP
 # The below assumes the reverse dns PTR record of sender server's IP is resolving to mail.example.ca! If not, do not apply this fix
 # to fix the HELO domain used when sending smtp
