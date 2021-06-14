@@ -70,3 +70,31 @@ tail /var/log/exim4/mainlog
 # /etc/hosts Note 127.0.1.1 should have first fully qualified fqdn name (if any) then the short hostname; important for exim4 as well
 # 127.0.0.1       localhost
 # 127.0.1.1       voip.inss.ca voip
+
+
+#
+# USE THE ONES BELOW VERY CAREFULLY (used for virtgurunew server)
+# In most cases may do more harm if applied blindly!!!
+#
+
+# Override envelope sender's FROM address, to match spf records
+# the stuff below assumes that the domain we override with (example.ca) HAS SPF DNS record which allows the sending server IP to send email for example.ca !!
+# Usually exim4 sends email from root@virtguru.example.ca (host is taken from hosts, first hostname for 127.0.1.1)
+# to override this and send with envelope MAIL FROM ..@example.ca (and so use all the spf etc verifications already existing for example.ca):
+cat /etc/email-addresses
+# and add a line like:
+# root: virtgurunew.root@example.ca
+#
+
+
+# Override SMTP HELO/EHLO host name used for outgoing mail
+# This SOMETIME works if we want the reverse DNS of the server announced in HELO/EHLO to match sending IP
+# The below assumes the reverse dns PTR record of sender server's IP is resolving to mail.example.ca! If not, do not apply this fix
+# to fix the HELO domain used when sending smtp
+nano -w /etc/exim4/exim4.conf.localmacros 
+# and add the line
+# MAIN_HARDCODE_PRIMARY_HOSTNAME = mail.example.ca
+#
+
+
+
