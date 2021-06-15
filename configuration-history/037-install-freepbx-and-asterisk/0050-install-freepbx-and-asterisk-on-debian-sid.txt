@@ -67,8 +67,13 @@ apt install tcpdump
 
 # add the extra nodejs repo;
 # note that with nodejs version 12, ucp module is not working - does not compile? (but 11 is considered legacy? (watch out for this, v 12 may become fixed/compatible at later stage)
-curl -sL https://deb.nodesource.com/setup_11.x | bash -
-apt install nodejs
+#curl -sL https://deb.nodesource.com/setup_11.x | bash -
+#apt install nodejs
+
+# nodejs 12 is now ok
+apt install --no-install-recommends nodejs npm
+
+
 
 pear install Console_Getopt # May not be needed anymore? May try without it. See FREEPBX Framework module, changelog entry 15.0.2.1: Remove need for Pear getopts
 
